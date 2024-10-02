@@ -19,6 +19,11 @@ import java.math.BigDecimal;
 
 import org.docksidestage.unit.PlainTestCase;
 
+// TODO shinny [読み物課題] レビューしやすいコード (Reviewable Code) by jflute (2024/10/02)
+// https://jflute.hatenadiary.jp/entry/20160912/reviewable
+
+// TODO jflute 1on1にて、背景コメントの補足をちょこっとずつやっていく (2024/10/02)
+// http://dbflute.seasar.org/ja/tutorial/handson/review/codingpolicy.html#backgroundcomment
 /**
  * The test of variable. <br>
  * Operate exercise as javadoc. If it's question style, write your answer before test execution. <br>
