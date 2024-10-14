@@ -16,6 +16,7 @@
 package org.docksidestage.javatry.basic;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.docksidestage.unit.PlainTestCase;
@@ -25,7 +26,7 @@ import org.docksidestage.unit.PlainTestCase;
  * Operate exercise as javadoc. If it's question style, write your answer before test execution. <br>
  * (javadocの通りにエクササイズを実施。質問形式の場合はテストを実行する前に考えて答えを書いてみましょう)
  * @author jflute
- * @author your_name_here
+ * @author shiny
  */
 public class Step02IfForTest extends PlainTestCase {
 
@@ -52,7 +53,9 @@ public class Step02IfForTest extends PlainTestCase {
         } else {
             sea = 7;
         }
-        log(sea); // your answer? => 
+        log(sea); // your answer? => 7
+        // 背景：「Condition: 904より大きい」に当てはまらない為
+        // 答え：正解でした。
     }
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
@@ -67,7 +70,9 @@ public class Step02IfForTest extends PlainTestCase {
         } else {
             sea = 9;
         }
-        log(sea); // your answer? => 
+        log(sea); // your answer? => 7
+        // 背景：「二番目のCondition：904 以上」に当てはまる為
+        // 答え：正解でした。
     }
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
@@ -97,7 +102,12 @@ public class Step02IfForTest extends PlainTestCase {
         if (land) {
             sea = 10;
         }
-        log(sea); // your answer? => 
+        log(sea); // your answer? => 10
+        // 背景：
+        // 1. Condition: seaは903以上に当てはまるので中に入る → sea=8になる、landがFalseからTrueになる
+        // 2. Condition: sea > 7 && sea < 9 に当てはまるので（８だから）、decrementされる
+        // 3. LandがTrueなのでsea = 10になって終わり
+        // 答え：正解でした。
     }
 
     // ===================================================================================
@@ -113,7 +123,9 @@ public class Step02IfForTest extends PlainTestCase {
                 sea = stage;
             }
         }
-        log(sea); // your answer? => 
+        log(sea); // your answer? => dockside
+        // Index = 1の時飲みseaにstageがAssignされるので、seaはlistのIndex1のdocksideになる
+        // 答え：正解でした。
     }
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
@@ -123,7 +135,9 @@ public class Step02IfForTest extends PlainTestCase {
         for (String stage : stageList) {
             sea = stage;
         }
-        log(sea); // your answer? => 
+        log(sea); // your answer? => magiclamp
+        // foreach文で単純に回るので最後の要素がAssignされてLoopが終わる
+        // 答え：正解でした。
     }
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
@@ -139,7 +153,12 @@ public class Step02IfForTest extends PlainTestCase {
                 break;
             }
         }
-        log(sea); // your answer? => 
+        log(sea); // your answer? => hangar
+        // 背景：
+        // 1. 最初の要素Broadwayの時はスキップ
+        // 2. 次のdockside, hangarにはAssignされる
+        // 3. hangarがgaを含んでるのでそこでLoopストップ
+        // 答え：正解でした。
     }
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
@@ -155,7 +174,12 @@ public class Step02IfForTest extends PlainTestCase {
             }
         });
         String sea = sb.toString();
-        log(sea); // your answer? => 
+        log(sea); // your answer? => dockside
+        // 背景：
+        // 1. ループ内でまず最初のConditionはスキップ
+        // 2. iが含まれてるdocksideに来た時にAppendされる
+        // 3. その時点で最初のConditionがTrueになるのでReturnされ続ける
+        // 答え：正解でした。
     }
 
     // ===================================================================================
@@ -167,6 +191,10 @@ public class Step02IfForTest extends PlainTestCase {
      */
     public void test_iffor_making() {
         // write if-for here
+        List<String> stageList = prepareStageList();
+        stageList.forEach(stage -> {
+            if (stage.contains("a")) log(stage);
+        });
     }
 
     // ===================================================================================
@@ -178,18 +206,25 @@ public class Step02IfForTest extends PlainTestCase {
      */
     public void test_iffor_refactor_foreach_to_forEach() {
         List<String> stageList = prepareStageList();
-        String sea = null;
-        for (String stage : stageList) {
-            if (stage.startsWith("br")) {
-                continue;
-            }
-            sea = stage;
-            if (stage.contains("ga")) {
-                break;
-            }
-        }
-        log(sea); // should be same as before-fix
+        String[] sea = { null };
+        try {
+            stageList.forEach(stage -> {
+                if (stage.startsWith("br")) {
+                    return;
+                }
+                sea[0] = stage;
+                if (stage.contains("ga")) {
+                    throw new RuntimeException();
+                }
+            });
+        } catch (RuntimeException ignored) {}
+        log(sea[0]); // should be same as before-fix
     }
+    // 背景：
+    // できるだけ同じような形で実現しようと思った。
+    // continueはreturnで同じような振る舞いを実現
+    // Lambda expressionの中で使う変数はfinalもしくは実質的FinalじゃないといけないとIDEに怒られたのでArrayに変更 → 参照自体は実質Finalだが、中身は変えれるので
+    // forEach()でBreakに当たるものが思い浮かばなかったのでExceptionを投げることに（あくまでエクササイズなので）→ Catchはするがスルー
 
     /**
      * Make your original exercise as question style about if-for statement. <br>
@@ -197,12 +232,36 @@ public class Step02IfForTest extends PlainTestCase {
      * <pre>
      * _/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
      * your question here (ここにあなたの質問を):
-     * 
+     * What string is num variable at the method end? <br>
+     * (メソッド終了時の変数 num の中身は？)
      * _/_/_/_/_/_/_/_/_/_/
      * </pre>
      */
     public void test_iffor_yourExercise() {
         // write your code here
+        List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+        List<Integer> proceedNumbers = new ArrayList<>();
+        Integer num;
+        Boolean[] isItTrue = { false };
+
+        try {
+            numbers.forEach(number -> {
+                if (number % 2 == 1) {
+                    proceedNumbers.add(number * number);
+                }
+                isItTrue[0] = !isItTrue[0];
+                if (number * number > 60) {
+                    throw new RuntimeException();
+                }
+            });
+        } catch (RuntimeException e) {
+            if (!isItTrue[0]) {
+                isItTrue[0] = true;
+            }
+        }
+
+        num = isItTrue[0] ? proceedNumbers.get(proceedNumbers.size() - 1) : null;
+        log(num);
     }
 
     // ===================================================================================
