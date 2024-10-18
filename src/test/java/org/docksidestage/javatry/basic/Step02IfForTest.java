@@ -108,6 +108,7 @@ public class Step02IfForTest extends PlainTestCase {
         // 2. Condition: sea > 7 && sea < 9 に当てはまるので（８だから）、decrementされる
         // 3. LandがTrueなのでsea = 10になって終わり
         // 答え：正解でした。
+        // TODO jflute 1on1にてソースコードリーディングのコツ1の話をする予定 (2024/10/18)
     }
 
     // ===================================================================================
@@ -193,7 +194,8 @@ public class Step02IfForTest extends PlainTestCase {
         // write if-for here
         List<String> stageList = prepareStageList();
         stageList.forEach(stage -> {
-            if (stage.contains("a")) log(stage);
+            if (stage.contains("a"))
+                log(stage);
         });
     }
 
@@ -217,7 +219,10 @@ public class Step02IfForTest extends PlainTestCase {
                     throw new RuntimeException();
                 }
             });
-        } catch (RuntimeException ignored) {}
+        } catch (RuntimeException ignored) {
+            // TODO shiny [いいね] ぼくもこういう例外のときは、変数名自体に ignored って付けちゃいます(^^ by jflute (2024/10/18)
+            // オープンソースのコードでそういうのを見かけて真似るようになったので、わりと世界的な慣習かもですね。
+        }
         log(sea[0]); // should be same as before-fix
     }
     // 背景：
@@ -225,6 +230,20 @@ public class Step02IfForTest extends PlainTestCase {
     // continueはreturnで同じような振る舞いを実現
     // Lambda expressionの中で使う変数はfinalもしくは実質的FinalじゃないといけないとIDEに怒られたのでArrayに変更 → 参照自体は実質Finalだが、中身は変えれるので
     // forEach()でBreakに当たるものが思い浮かばなかったのでExceptionを投げることに（あくまでエクササイズなので）→ Catchはするがスルー
+    //
+    // TODO shiny [ふぉろー] おお、見事に実現してますね！ by jflute (2024/10/18)
+    // forEach()は文法的には単なるコールバック処理で、中でJavaの標準文法であるfor文を使っていてメソッド経由で代理している感じですね。
+    // (イメージとしては)別世界の処理の中でローカル変数の書き換えができちゃうと複雑になっちゃうだろうということでJavaが禁止しています。
+    // ゆえに、String[] sea にしないとループ内で副作用を起こせないだけです。
+    // まあ通常、こういうケースではforEach()を使うのではなくfor文のままで実装することが多いです。
+    // ここでは違いを知ってもらうためにあえて無茶なことをやってもらうエクササイズにしています。
+    //
+    // そして、continueの代わりがreturnはGoodです。コールバックのLambda式は要はメソッドなので、returnで強制終了させれば次のループに行きます。
+    // 一方で、breakはどうにもならないのはその通りです。Java標準文法のfor文が隠されちゃっていますから、処理を止めるとなったら例外しかないわけですね。
+    // ただ、javatryやる人で言うと、この時点で例外を知らない人が多いので、別の代替策でどうにかする人も多いです。
+    // 挙動は一致しなくても結果が変わらなければ同じと捉えて、"ga" が含まれている時点で次回のループを空ループさせるような工夫をして、
+    // stageListは最後まで回りますが、seaの値は全く変わらず同じなので結果が同じと。
+    // どっちも正解なので、別の方法も頭でシミュレーションしてみて「なるほど」と思ってもらえればと。
 
     /**
      * Make your original exercise as question style about if-for statement. <br>
@@ -262,6 +281,14 @@ public class Step02IfForTest extends PlainTestCase {
 
         num = isItTrue[0] ? proceedNumbers.get(proceedNumbers.size() - 1) : null;
         log(num);
+        // TODO shiny [いいね] 49! ふぅ、合ってた... by jflute (2024/10/18)
+        // とにかくtrue/falseどっちになるのかで最後大きく違うので先にそこを見る。
+        // 例外が発生するとしないでtrue/falseが代わるので例外が発生するか？8*8で60超えで必ず例外は発生する。
+        // true/falseの反転は交互に行われるようなので、偶数時にfalseに変更され、奇数時にtrueに変更される。
+        // 8のときはfalseに変更された直後に例外が発生して、catchでtrueに戻される。
+        // なので、最後はtrueでnumbersの最後の要素には、直近の奇数である7の自乗で49と。
+        //
+        // こういうエクササイズが考えつくということは、プログラムの制御の本質をしっかり理解している証拠ですね(^^。
     }
 
     // ===================================================================================
