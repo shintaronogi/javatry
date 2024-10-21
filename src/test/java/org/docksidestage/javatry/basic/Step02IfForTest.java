@@ -220,8 +220,9 @@ public class Step02IfForTest extends PlainTestCase {
                 }
             });
         } catch (RuntimeException ignored) {
-            // TODO shiny [いいね] ぼくもこういう例外のときは、変数名自体に ignored って付けちゃいます(^^ by jflute (2024/10/18)
+            // TODO done shiny [いいね] ぼくもこういう例外のときは、変数名自体に ignored って付けちゃいます(^^ by jflute (2024/10/18)
             // オープンソースのコードでそういうのを見かけて真似るようになったので、わりと世界的な慣習かもですね。
+            // TODO jflute ワンラインで書けるけど、改行（＆Indent）した方がいいのかシリーズを次の1on1でちょっとお聞きしたいです！
         }
         log(sea[0]); // should be same as before-fix
     }
@@ -231,7 +232,7 @@ public class Step02IfForTest extends PlainTestCase {
     // Lambda expressionの中で使う変数はfinalもしくは実質的FinalじゃないといけないとIDEに怒られたのでArrayに変更 → 参照自体は実質Finalだが、中身は変えれるので
     // forEach()でBreakに当たるものが思い浮かばなかったのでExceptionを投げることに（あくまでエクササイズなので）→ Catchはするがスルー
     //
-    // TODO shiny [ふぉろー] おお、見事に実現してますね！ by jflute (2024/10/18)
+    // TODO done shiny (なるほどです！) [ふぉろー] おお、見事に実現してますね！ by jflute (2024/10/18)
     // forEach()は文法的には単なるコールバック処理で、中でJavaの標準文法であるfor文を使っていてメソッド経由で代理している感じですね。
     // (イメージとしては)別世界の処理の中でローカル変数の書き換えができちゃうと複雑になっちゃうだろうということでJavaが禁止しています。
     // ゆえに、String[] sea にしないとループ内で副作用を起こせないだけです。
@@ -281,7 +282,7 @@ public class Step02IfForTest extends PlainTestCase {
 
         num = isItTrue[0] ? proceedNumbers.get(proceedNumbers.size() - 1) : null;
         log(num);
-        // TODO shiny [いいね] 49! ふぅ、合ってた... by jflute (2024/10/18)
+        // TODO done shiny (久保さんの読み方・解き方が参考になりました！) [いいね] 49! ふぅ、合ってた... by jflute (2024/10/18)
         // とにかくtrue/falseどっちになるのかで最後大きく違うので先にそこを見る。
         // 例外が発生するとしないでtrue/falseが代わるので例外が発生するか？8*8で60超えで必ず例外は発生する。
         // true/falseの反転は交互に行われるようなので、偶数時にfalseに変更され、奇数時にtrueに変更される。

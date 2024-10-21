@@ -26,7 +26,7 @@ import org.docksidestage.unit.PlainTestCase;
  * Operate exercise as javadoc. If it's question style, write your answer before test execution. <br>
  * (javadocの通りにエクササイズを実施。質問形式の場合はテストを実行する前に考えて答えを書いてみましょう)
  * @author jflute
- * @author your_name_here
+ * @author shiny
  */
 public class Step03DataTypeTest extends PlainTestCase {
 
@@ -54,7 +54,13 @@ public class Step03DataTypeTest extends PlainTestCase {
             BigDecimal addedDecimal = amba.add(new BigDecimal(land));
             sea = String.valueOf(addedDecimal);
         }
-        log(sea); // your answer? => 
+        log(sea); // your answer? => 18.4
+        // 背景：
+        // dstoreの値によってSeaの中身が変わるか変わらないかが決まるので、まずそこをみる → TrueなのでIfの中には入る
+        // landはbonvoの月プラス１を取得した後、-1されるので9
+        // ambda 9.4にland 9がプラスされて18.4 → それがSeaになる
+        //
+        // 答え：正解でした。(IntelliJはナビゲーションで内部実装見れるか便利だ...!)
     }
 
     // ===================================================================================
@@ -76,13 +82,23 @@ public class Step03DataTypeTest extends PlainTestCase {
             bonvo = piari;
             sea = (byte) land;
             if (amba == 2.3D) {
+                // amba += 0.5; Roundされるか切り捨てされるかを一瞬試した痕跡。
                 sea = (byte) amba;
             }
         }
         if ((int) dstore > piari) {
             sea = 0;
         }
-        log(sea); // your answer? => 
+        log(sea); // your answer? => 2 (かな...)
+        // intellijが賢くて既にIf Statementがalways trueだよーとか教えてくれるw というのは置いておいて...
+        // まず、dstore > piariはFalseなのは、変数二つともReassignされてない＆dstoreをIntにすると切り捨てられるので、1 > 1は常にFalse
+        // 逆にdstore >= piariは 1>=1 なのでTrue＆miraco == 'a'もTrueなのでIfの中に入る
+        // Seaの結果はambda == 2.3Dに依存するので、そこをみる → Ambdaを書き換えられてないのでTrueになる （dはJavaでDouble型(double precision number)に明示的につけれるもの、大文字でもいけたはず...）
+        // ambdaがByte型になる → Byteは整数8ビットなので切り捨てられる → 結果Seaは2になる
+        //
+        // 答え：正解でした。(切り捨てられるのかっていうのがちょっと自信なかったけど、あってそう。ちょっと試してみたけどRoundではない)
+        // 呟き：Javaでは、整数だとbyte, short, int, longで偶に名前がごっちゃになって「あれ、これ何バイトだっけ？」ってなるのでGoみたいにint8, int16, ...ってしてくれてるのは好きです。
+        // TODO jflute プログラム書くときは、Overflowにならないように気をつけるので気にしたことはなかったですが、Overflowの計算のロジックが知りたいです！
     }
 
     // ===================================================================================
@@ -92,7 +108,8 @@ public class Step03DataTypeTest extends PlainTestCase {
     public void test_datatype_object() {
         St3ImmutableStage stage = new St3ImmutableStage("hangar");
         String sea = stage.getStageName();
-        log(sea); // your answer? => 
+        log(sea); // your answer? => hangar
+        // 答え：正解でした。
     }
 
     private static class St3ImmutableStage {
