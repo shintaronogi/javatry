@@ -108,7 +108,10 @@ public class Step02IfForTest extends PlainTestCase {
         // 2. Condition: sea > 7 && sea < 9 に当てはまるので（８だから）、decrementされる
         // 3. LandがTrueなのでsea = 10になって終わり
         // 答え：正解でした。
-        // TODO jflute 1on1にてソースコードリーディングのコツ1の話をする予定 (2024/10/18)
+        // done jflute 1on1にてソースコードリーディングのコツ1の話をする予定 (2024/10/18)
+        // 1: 漠然読み
+        // 2: 速く解を出すためのキーポイントを見出して、そこから細かく読む (場合によっては下から読む)
+        // 仮説検証的な読み方をしていく
     }
 
     // ===================================================================================
@@ -220,9 +223,12 @@ public class Step02IfForTest extends PlainTestCase {
                 }
             });
         } catch (RuntimeException ignored) {
-            // TODO done shiny [いいね] ぼくもこういう例外のときは、変数名自体に ignored って付けちゃいます(^^ by jflute (2024/10/18)
+            // done shiny [いいね] ぼくもこういう例外のときは、変数名自体に ignored って付けちゃいます(^^ by jflute (2024/10/18)
             // オープンソースのコードでそういうのを見かけて真似るようになったので、わりと世界的な慣習かもですね。
-            // TODO jflute ワンラインで書けるけど、改行（＆Indent）した方がいいのかシリーズを次の1on1でちょっとお聞きしたいです！
+            // done jflute ワンラインで書けるけど、改行（＆Indent）した方がいいのかシリーズを次の1on1でちょっとお聞きしたいです！
+            // 半分は慣習で続いている。そのきっかけは統一性、無難さをJavaの世界では重視しているから？
+            // (Javaの世界は、省略に対して、そこまで魅力を見出しすぎない: 省略の好きの度合いが違う)
+            // (悪く言うと「中途半端指向プログラミング」、よく言うと「バランス指向プログラミング」)
         }
         log(sea[0]); // should be same as before-fix
     }
@@ -232,7 +238,7 @@ public class Step02IfForTest extends PlainTestCase {
     // Lambda expressionの中で使う変数はfinalもしくは実質的FinalじゃないといけないとIDEに怒られたのでArrayに変更 → 参照自体は実質Finalだが、中身は変えれるので
     // forEach()でBreakに当たるものが思い浮かばなかったのでExceptionを投げることに（あくまでエクササイズなので）→ Catchはするがスルー
     //
-    // TODO done shiny (なるほどです！) [ふぉろー] おお、見事に実現してますね！ by jflute (2024/10/18)
+    // done shiny (なるほどです！) [ふぉろー] おお、見事に実現してますね！ by jflute (2024/10/18)
     // forEach()は文法的には単なるコールバック処理で、中でJavaの標準文法であるfor文を使っていてメソッド経由で代理している感じですね。
     // (イメージとしては)別世界の処理の中でローカル変数の書き換えができちゃうと複雑になっちゃうだろうということでJavaが禁止しています。
     // ゆえに、String[] sea にしないとループ内で副作用を起こせないだけです。
@@ -282,7 +288,7 @@ public class Step02IfForTest extends PlainTestCase {
 
         num = isItTrue[0] ? proceedNumbers.get(proceedNumbers.size() - 1) : null;
         log(num);
-        // TODO done shiny (久保さんの読み方・解き方が参考になりました！) [いいね] 49! ふぅ、合ってた... by jflute (2024/10/18)
+        // done shiny (久保さんの読み方・解き方が参考になりました！) [いいね] 49! ふぅ、合ってた... by jflute (2024/10/18)
         // とにかくtrue/falseどっちになるのかで最後大きく違うので先にそこを見る。
         // 例外が発生するとしないでtrue/falseが代わるので例外が発生するか？8*8で60超えで必ず例外は発生する。
         // true/falseの反転は交互に行われるようなので、偶数時にfalseに変更され、奇数時にtrueに変更される。
