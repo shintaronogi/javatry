@@ -57,6 +57,8 @@ public class Step04MethodTest extends PlainTestCase {
         // 答え：正解でした。
     }
 
+    // [ふぉろー] function, supply, consumeのFunctionInterfaceとの名前の関わりの話をした by jflute (2024/10/30)
+    // runnableの慣習的な話もした
     private String functionSomething(String name) {
         String replaced = name.replace("tic", "mys");
         log("in function: {}", replaced);
@@ -157,6 +159,7 @@ public class Step04MethodTest extends PlainTestCase {
     //                                                                           =========
     // write instance variables here
     private Boolean availableLogging = true;
+
     /**private
      * Make private methods as followings, and comment out caller program in test method:
      * <pre>
@@ -184,19 +187,24 @@ public class Step04MethodTest extends PlainTestCase {
         }
     }
 
+    // TODO shiny [いいね] メソッドの定義順がとても直感的でわかりやすい by jflute (2024/10/30)
+    // publicの処理の流れとprivateの個々の部品の関係性が、メソッドの定義の場所で表現されている。
     // write methods here
     private String replaceAwithB(String input) {
         return input.replace("A", "B");
     }
 
     private String replaceCwithB(String input) {
+        // TODO shiny A->B じゃなくて C->B でございます by jflute (2024/10/30)
         return input.replace("A", "B");
     }
 
+    // TODO shiny [いいね] 引数名の表現が素晴らしい by jflute (2024/10/30)
     private String quote(String innerString, String outerString) {
         return String.format("%s%s%s", outerString, innerString, outerString);
     }
 
+    // TODO shiny こういうケースなら、booleanの方がよく使われます by jflute (2024/10/30)
     private Boolean isAvailableLogging() {
         return availableLogging;
     }

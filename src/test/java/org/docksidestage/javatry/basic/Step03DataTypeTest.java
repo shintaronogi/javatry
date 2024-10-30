@@ -81,9 +81,11 @@ public class Step03DataTypeTest extends PlainTestCase {
             land = (short) bonvo;
             bonvo = piari;
             sea = (byte) land;
+            log(sea);
             if (amba == 2.3D) {
                 // amba += 0.5; Roundされるか切り捨てされるかを一瞬試した痕跡。
                 sea = (byte) amba;
+                log(sea);
             }
         }
         if ((int) dstore > piari) {
@@ -98,7 +100,21 @@ public class Step03DataTypeTest extends PlainTestCase {
         //
         // 答え：正解でした。(切り捨てられるのかっていうのがちょっと自信なかったけど、あってそう。ちょっと試してみたけどRoundではない)
         // 呟き：Javaでは、整数だとbyte, short, int, longで偶に名前がごっちゃになって「あれ、これ何バイトだっけ？」ってなるのでGoみたいにint8, int16, ...ってしてくれてるのは好きです。
-        // TODO jflute プログラム書くときは、Overflowにならないように気をつけるので気にしたことはなかったですが、Overflowの計算のロジックが知りたいです！
+        // done jflute プログラム書くときは、Overflowにならないように気をつけるので気にしたことはなかったですが、Overflowの計算のロジックが知りたいです！
+        // done shiny [ふぉろー] 一緒に検証してみた by jflute (2024/10/30)
+        // 小数点は切り捨て、縮小変換はなんと-1になる (もし-のデカい値だったら逆に+1になる)
+        //
+        // 実際の現場では、int, long, booleanくらいしかプリミティブ型は使われない。
+        // 標準のintが普段は利用されていて、21億xxxを超えるような数値だけlongが使われる。
+        //
+        // booleanはそのままtrue/falseだけを表現するものとして使われる。
+        // (逆にBooleanはほとんど使われない: true/false/nullってほぼあり得ない)
+        // (だた0ではない、例えばリクエストパラメーター(JSON)とかで項目未指定を表現するためにBooleanとかある)
+        // (そういう意味ではローカル変数でBooleanはほぼほぼないと言える)
+        //
+        // float, doubleは小数点で使うと思いきや、コンピューター的な誤差の問題があるので業務ではBigDecimal使う。
+        //
+        // charは、フレームワークとかライブラリとかではパフォーマンスのために使うけど、業務ではStringに代替される。
     }
 
     // ===================================================================================
