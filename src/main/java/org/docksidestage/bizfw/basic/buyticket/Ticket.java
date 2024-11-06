@@ -24,6 +24,8 @@ public class Ticket {
     // ===================================================================================
     //                                                                           Attribute
     //                                                                           =========
+    // TODO shiny インスタンス変数の並び順、データの出どころの種類で分けるか？データの使われ方で分けるか？ by jflute (2024/11/06)
+    // 正解はないですが1on1でフォローした通り色々なパターンあります。納得した形でやってもらえればなのでお任せします。
     private final TicketType type; // can be one-, two- or four-day
     private int availableDays; // depends on the type of ticket (e.g. two days) and decreases with doInPark
     private final int displayPrice; // written on ticket, park guest can watch this
@@ -38,6 +40,7 @@ public class Ticket {
     }
 
     private int calculateAvailableDays(TicketType type) {
+        // TODO shiny 修行++: チケット種別が増えたとき、あっちらこっちら修正したくないので...あまりswitch caseの箇所を減らしたい by jflute (2024/11/06)
         switch (type) {
         case ONE_DAY:
             return 1;
@@ -55,7 +58,8 @@ public class Ticket {
     //                                                                             =======
     public void doInPark() {
         if (!isAvailable()) {
-            throw new IllegalStateException("Ticket is unavailable. Already in park by this ticket, exceeding the limit.: displayedPrice=" + displayPrice);
+            throw new IllegalStateException(
+                    "Ticket is unavailable. Already in park by this ticket, exceeding the limit.: displayedPrice=" + displayPrice);
         }
         availableDays--;
     }

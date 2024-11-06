@@ -52,6 +52,7 @@ public class TicketBooth {
     // * @throws TicketSoldOutException ブース内のチケットが売り切れだったら
     // * @throws TicketShortMoneyException 買うのに金額が足りなかったら
     // */
+    // TODO shiny JavaDoc, 戻り値の説明をお願いします by jflute (2024/11/06)
     /**
      * Buy one-day passport, method for park guest.
      * @param handedMoney The money (amount) handed over from park guest. (NotNull, NotMinus)
@@ -75,6 +76,7 @@ public class TicketBooth {
         return oneDayPassport;
     }
 
+    // TODO shiny JavaDoc, 戻り値の説明をお願いします by jflute (2024/11/06)
     /**
      * Buy two-day passport, method for park guest.
      * @param handedMoney The money (amount) handed over from park guest. (NotNull, NotMinus)
@@ -91,7 +93,7 @@ public class TicketBooth {
         --twoDayPassportQuantity;
         if (salesProceeds != null) {
             salesProceeds = salesProceeds + TWO_DAY_PRICE;
-        }else {
+        } else {
             salesProceeds = TWO_DAY_PRICE;
         }
         Integer change = handedMoney - TWO_DAY_PRICE;

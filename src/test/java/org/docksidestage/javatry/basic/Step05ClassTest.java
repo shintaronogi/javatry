@@ -128,16 +128,16 @@ public class Step05ClassTest extends PlainTestCase {
      */
     public void test_class_letsFix_makeMethod_twoday() {
         // uncomment after making the method
-         TicketBooth booth = new TicketBooth();
-         int money = 14000;
-         TicketBuyResult ticketBuyResult = booth.buyTwoDayPassport(money);
-         int change = ticketBuyResult.getChange();
-         Integer sea = booth.getSalesProceeds() + change;
-         log(sea); // should be same as money
+        TicketBooth booth = new TicketBooth();
+        int money = 14000;
+        TicketBuyResult ticketBuyResult = booth.buyTwoDayPassport(money);
+        int change = ticketBuyResult.getChange();
+        Integer sea = booth.getSalesProceeds() + change;
+        log(sea); // should be same as money
 
         // and show two-day passport quantity here
-         int twoDayPassportQuantity = booth.getTwoDayPassportQuantity();
-         log(twoDayPassportQuantity);
+        int twoDayPassportQuantity = booth.getTwoDayPassportQuantity();
+        log(twoDayPassportQuantity);
 
         // ただのコメント：とりあえず同じように実装してみたが、Duplicateだらけなので、リファクタしたい汗
         // だが、この後そういうエクササイズがくると思っているので一旦スルー
@@ -155,6 +155,8 @@ public class Step05ClassTest extends PlainTestCase {
         log(booth.getOneDayPassportQuantity(), booth.getSalesProceeds()); // should be same as before-fix
     }
     // ただのコメント：ん？なんで差分でてる？と思ったら、IntelliJのRefactor昨日で関数名変えたからだ
+    // TODO shiny 在庫を分けた状態のまま、doBuyPassport()的なメソッドを作ってみましょう by jflute (2024/11/06)
+    // (1on1でのふぉろー: doBuyのdoって？)
 
     // ===================================================================================
     //                                                                           Challenge
