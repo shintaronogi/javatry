@@ -52,6 +52,9 @@ public class TicketBooth {
     // * @throws TicketSoldOutException ブース内のチケットが売り切れだったら
     // * @throws TicketShortMoneyException 買うのに金額が足りなかったら
     // */
+    // [jflute memo] javadocの話をした。なんでもかんでもjavadocにするわけじゃないけどpublicとかはわりとjavadoc。
+    // [jflute memo] どうしてもコピペせざるを得ないときのテクニックの話。
+    // [jflute memo] コード整形用のテキストファイル、エラー保存用のテキストファイルなどの話。
     // TODO shiny JavaDoc, 戻り値の説明をお願いします by jflute (2024/11/06)
     /**
      * Buy one-day passport, method for park guest.
