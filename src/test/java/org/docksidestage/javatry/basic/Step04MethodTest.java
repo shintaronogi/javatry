@@ -158,7 +158,7 @@ public class Step04MethodTest extends PlainTestCase {
     //                                                                           Challenge
     //                                                                           =========
     // write instance variables here
-    private Boolean availableLogging = true;
+    private boolean availableLogging = true;
 
     /**private
      * Make private methods as followings, and comment out caller program in test method:
@@ -187,7 +187,7 @@ public class Step04MethodTest extends PlainTestCase {
         }
     }
 
-    // TODO shiny [いいね] メソッドの定義順がとても直感的でわかりやすい by jflute (2024/10/30)
+    // TODO done shiny [いいね] メソッドの定義順がとても直感的でわかりやすい by jflute (2024/10/30)
     // publicの処理の流れとprivateの個々の部品の関係性が、メソッドの定義の場所で表現されている。
     // write methods here
     private String replaceAwithB(String input) {
@@ -195,17 +195,17 @@ public class Step04MethodTest extends PlainTestCase {
     }
 
     private String replaceCwithB(String input) {
-        // TODO shiny A->B じゃなくて C->B でございます by jflute (2024/10/30)
-        return input.replace("A", "B");
+        // TODO done shiny A->B じゃなくて C->B でございます by jflute (2024/10/30)
+        return input.replace("C", "B");
     }
 
-    // TODO shiny [いいね] 引数名の表現が素晴らしい by jflute (2024/10/30)
+    // TODO shiny done [いいね] 引数名の表現が素晴らしい by jflute (2024/10/30)
     private String quote(String innerString, String outerString) {
         return String.format("%s%s%s", outerString, innerString, outerString);
     }
 
-    // TODO shiny こういうケースなら、booleanの方がよく使われます by jflute (2024/10/30)
-    private Boolean isAvailableLogging() {
+    // TODO shiny done こういうケースなら、booleanの方がよく使われます by jflute (2024/10/30)
+    private boolean isAvailableLogging() {
         return availableLogging;
     }
 

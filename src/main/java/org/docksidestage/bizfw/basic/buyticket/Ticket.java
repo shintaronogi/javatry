@@ -17,40 +17,61 @@ package org.docksidestage.bizfw.basic.buyticket;
 
 /**
  * @author jflute
+ * @author shiny
  */
 public class Ticket {
 
     // ===================================================================================
     //                                                                           Attribute
     //                                                                           =========
+    private final TicketType type; // can be one-, two- or four-day
+    private int availableDays; // depends on the type of ticket (e.g. two days) and decreases with doInPark
     private final int displayPrice; // written on ticket, park guest can watch this
-    private boolean alreadyIn; // true means this ticket is unavailable
 
     // ===================================================================================
     //                                                                         Constructor
     //                                                                         ===========
-    public Ticket(int displayPrice) {
+    public Ticket(TicketType type, int displayPrice) {
+        this.type = type;
+        this.availableDays = calculateAvailableDays(type);
         this.displayPrice = displayPrice;
+    }
+
+    private int calculateAvailableDays(TicketType type) {
+        switch (type) {
+        case ONE_DAY:
+            return 1;
+        case TWO_DAY:
+            return 2;
+        case FOUR_DAY:
+            return 4;
+        default:
+            throw new IllegalArgumentException("Unknown TicketType: " + type);
+        }
     }
 
     // ===================================================================================
     //                                                                             In Park
     //                                                                             =======
     public void doInPark() {
-        if (alreadyIn) {
-            throw new IllegalStateException("Already in park by this ticket: displayedPrice=" + displayPrice);
+        if (!isAvailable()) {
+            throw new IllegalStateException("Ticket is unavailable. Already in park by this ticket, exceeding the limit.: displayedPrice=" + displayPrice);
         }
-        alreadyIn = true;
+        availableDays--;
     }
 
     // ===================================================================================
     //                                                                            Accessor
     //                                                                            ========
+    public TicketType getType() {
+        return type;
+    }
+
     public int getDisplayPrice() {
         return displayPrice;
     }
 
-    public boolean isAlreadyIn() {
-        return alreadyIn;
+    public boolean isAvailable() {
+        return availableDays > 0;
     }
 }
