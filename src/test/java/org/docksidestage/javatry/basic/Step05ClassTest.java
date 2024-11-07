@@ -15,9 +15,12 @@
  */
 package org.docksidestage.javatry.basic;
 
+import java.time.LocalTime;
+
 import org.docksidestage.bizfw.basic.buyticket.Ticket;
 import org.docksidestage.bizfw.basic.buyticket.TicketBooth;
-import org.docksidestage.bizfw.basic.buyticket.TicketBooth.TicketShortMoneyException;
+import org.docksidestage.bizfw.basic.buyticket.exceptions.TicketInvalidTimeException;
+import org.docksidestage.bizfw.basic.buyticket.exceptions.TicketShortMoneyException;
 import org.docksidestage.bizfw.basic.buyticket.TicketBuyResult;
 import org.docksidestage.bizfw.basic.buyticket.TicketType;
 import org.docksidestage.unit.PlainTestCase;
@@ -155,8 +158,11 @@ public class Step05ClassTest extends PlainTestCase {
         log(booth.getOneDayPassportQuantity(), booth.getSalesProceeds()); // should be same as before-fix
     }
     // ただのコメント：ん？なんで差分でてる？と思ったら、IntelliJのRefactor昨日で関数名変えたからだ
-    // TODO shiny 在庫を分けた状態のまま、doBuyPassport()的なメソッドを作ってみましょう by jflute (2024/11/06)
+    // TODO done shiny 在庫を分けた状態のまま、doBuyPassport()的なメソッドを作ってみましょう by jflute (2024/11/06)
     // (1on1でのふぉろー: doBuyのdoって？)
+    // 在庫は別々の変数で管理するのではなくて、Hashmapを使い一元管理する方法を選びました。
+    // 最大在庫数は一律10なのでコンストラクタで一気に値を初期化する方法をとっています。
+    // ですが、別々の最大在庫数を設定することになる場合、Enumの変数として入れてもいいと思っています。
 
     // ===================================================================================
     //                                                                           Challenge
@@ -168,11 +174,12 @@ public class Step05ClassTest extends PlainTestCase {
     public void test_class_moreFix_return_ticket() {
         // uncomment out after modifying the method
         TicketBooth booth = new TicketBooth();
-        Ticket oneDayPassport = booth.buyOneDayPassport(10000);
+        TicketBuyResult buyResult = booth.buyOneDayPassport(10000);
+        Ticket oneDayPassport = buyResult.getTicket();
         log(oneDayPassport.getDisplayPrice()); // should be same as one-day price
-        log(oneDayPassport.isAvailable()); // should be true
+        log(oneDayPassport.hasRemainingDays()); // should be true
         oneDayPassport.doInPark();
-        log(oneDayPassport.isAvailable()); // should be false
+        log(oneDayPassport.hasRemainingDays()); // should be false
 
         // ただのコメント：isAvailable()に変えたのでtrueとfalseのログを逆転させてます
     }
@@ -202,13 +209,13 @@ public class Step05ClassTest extends PlainTestCase {
         TicketBuyResult buyResult = booth.buyTwoDayPassport(handedMoney);
         Ticket twoDayPassport = buyResult.getTicket();
         // 1回目の入館 (ディズニーシーに行く)
-        log(twoDayPassport.isAvailable()); // should be true
+        log(twoDayPassport.hasRemainingDays()); // should be true
         twoDayPassport.doInPark();
         // 2回目の入館（今度はランドに行く）
-        log(twoDayPassport.isAvailable()); // should still be true
+        log(twoDayPassport.hasRemainingDays()); // should still be true
         twoDayPassport.doInPark();
         // 3回目のトライ！
-        log(twoDayPassport.isAvailable()); // should be false ToT
+        log(twoDayPassport.hasRemainingDays()); // should be false ToT
         try {
             twoDayPassport.doInPark();
         } catch (IllegalStateException exceededTicketUseLimitException) {
@@ -223,10 +230,11 @@ public class Step05ClassTest extends PlainTestCase {
     public void test_class_moreFix_whetherTicketType() {
         // uncomment when you implement this exercise
         TicketBooth booth = new TicketBooth();
-        Ticket oneDayPassport = booth.buyOneDayPassport(10000);
+        TicketBuyResult buyResultOneDayPassport = booth.buyOneDayPassport(10000);
+        Ticket oneDayPassport = buyResultOneDayPassport.getTicket();
         showTicketIfNeeds(oneDayPassport);
-        TicketBuyResult buyResult = booth.buyTwoDayPassport(20000);
-        Ticket twoDayPassport = buyResult.getTicket();
+        TicketBuyResult buyResultTwoDayPaassport = booth.buyTwoDayPassport(20000);
+        Ticket twoDayPassport = buyResultTwoDayPaassport.getTicket();
         showTicketIfNeeds(twoDayPassport);
     }
 
@@ -249,6 +257,22 @@ public class Step05ClassTest extends PlainTestCase {
      */
     public void test_class_moreFix_wonder_four() {
         // your confirmation code here
+        TicketBooth booth = new TicketBooth();
+        int handedMoney = 222400;
+        TicketBuyResult buyResult = booth.buyFourDayPassport(handedMoney);
+        Ticket fourDayPassport = buyResult.getTicket();
+        // 1回目の入館
+        log(fourDayPassport.hasRemainingDays()); // should be true
+        fourDayPassport.doInPark();
+        // 2回目の入館
+        log(fourDayPassport.hasRemainingDays()); // should still be true
+        fourDayPassport.doInPark();
+        // 3回目のトライ(再び)！
+        log(fourDayPassport.hasRemainingDays()); // should be still be true this time!
+        fourDayPassport.doInPark();
+        // 4回目も入れる！
+        log(fourDayPassport.hasRemainingDays()); // should be still be true this time!
+        fourDayPassport.doInPark();
     }
 
     /**
@@ -257,6 +281,19 @@ public class Step05ClassTest extends PlainTestCase {
      */
     public void test_class_moreFix_wonder_night() {
         // your confirmation code here
+        TicketBooth booth = new TicketBooth();
+        int handedMoney = 7400;
+        TicketBuyResult buyResult = booth.buyNightOnlyTwoDayPassport(handedMoney);
+        Ticket nightOnlyTwoDayPassport = buyResult.getTicket();
+
+        log(nightOnlyTwoDayPassport.hasRemainingDays());
+        // ただのコメント：あ、ローカルのタイムベースなので18:00以降でないとエラー出る（という仕様なのですが...w）
+        try {
+            nightOnlyTwoDayPassport.doInPark();
+        } catch (TicketInvalidTimeException ticketInvalidTimeException) {
+            log("ディズニーに入れなかったようです泣...入る時間を間違えましたね。現在時刻:", LocalTime.now());
+            log(ticketInvalidTimeException);
+        }
     }
 
     /**

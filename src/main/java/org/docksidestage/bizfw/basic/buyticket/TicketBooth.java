@@ -15,6 +15,11 @@
  */
 package org.docksidestage.bizfw.basic.buyticket;
 
+import java.util.HashMap;
+
+import org.docksidestage.bizfw.basic.buyticket.exceptions.TicketShortMoneyException;
+import org.docksidestage.bizfw.basic.buyticket.exceptions.TicketSoldOutException;
+
 /**
  * @author jflute
  * @author shiny
@@ -25,20 +30,21 @@ public class TicketBooth {
     //                                                                          Definition
     //                                                                          ==========
     private static final int MAX_QUANTITY = 10;
-    private static final int ONE_DAY_PRICE = 7400; // when 2019/06/15
-    private static final int TWO_DAY_PRICE = 13200;
 
     // ===================================================================================
     //                                                                           Attribute
     //                                                                           =========
-    private int oneDayPassportQuantity = MAX_QUANTITY;
-    private int twoDayPassportQuantity = MAX_QUANTITY;
+    private final HashMap<TicketType, Integer> quantities; // stores the quantity for each ticket type
     private Integer salesProceeds; // null allowed: until first purchase
 
     // ===================================================================================
     //                                                                         Constructor
     //                                                                         ===========
     public TicketBooth() {
+        quantities = new HashMap<>();
+        for (TicketType type: TicketType.values()) {
+            quantities.put(type, MAX_QUANTITY);
+        }
     }
 
     // ===================================================================================
@@ -55,83 +61,83 @@ public class TicketBooth {
     // [jflute memo] javadocの話をした。なんでもかんでもjavadocにするわけじゃないけどpublicとかはわりとjavadoc。
     // [jflute memo] どうしてもコピペせざるを得ないときのテクニックの話。
     // [jflute memo] コード整形用のテキストファイル、エラー保存用のテキストファイルなどの話。
-    // TODO shiny JavaDoc, 戻り値の説明をお願いします by jflute (2024/11/06)
+    // TODO done shiny JavaDoc, 戻り値の説明をお願いします by jflute (2024/11/06)
     /**
      * Buy one-day passport, method for park guest.
      * @param handedMoney The money (amount) handed over from park guest. (NotNull, NotMinus)
      * @throws TicketSoldOutException When ticket in booth is sold out.
      * @throws TicketShortMoneyException When the specified money is short for purchase.
+     * @return TicketBuyResult The result of the transaction containing the ticket itself and the change
      */
-    public Ticket buyOneDayPassport(Integer handedMoney) {
-        if (oneDayPassportQuantity <= 0) {
-            throw new TicketSoldOutException("Sold out");
-        }
-        if (handedMoney < ONE_DAY_PRICE) {
-            throw new TicketShortMoneyException("Short money: " + handedMoney);
-        }
-        --oneDayPassportQuantity;
-        if (salesProceeds != null) { // second or more purchase
-            salesProceeds = salesProceeds + ONE_DAY_PRICE;
-        } else { // first purchase
-            salesProceeds = ONE_DAY_PRICE;
-        }
-        Ticket oneDayPassport = new Ticket(TicketType.ONE_DAY, ONE_DAY_PRICE);
-        return oneDayPassport;
+    public TicketBuyResult buyOneDayPassport(Integer handedMoney) {
+        return doBuyPassport(TicketType.ONE_DAY, handedMoney);
     }
 
-    // TODO shiny JavaDoc, 戻り値の説明をお願いします by jflute (2024/11/06)
+    // TODO done shiny JavaDoc, 戻り値の説明をお願いします by jflute (2024/11/06)
     /**
      * Buy two-day passport, method for park guest.
      * @param handedMoney The money (amount) handed over from park guest. (NotNull, NotMinus)
      * @throws TicketSoldOutException When ticket in booth is sold out.
      * @throws TicketShortMoneyException When the specified money is short for purchase.
+     * @return TicketBuyResult The result of the transaction containing the ticket itself and the change
      */
     public TicketBuyResult buyTwoDayPassport(Integer handedMoney) {
-        if (twoDayPassportQuantity <= 0) {
+        return doBuyPassport(TicketType.TWO_DAY, handedMoney);
+    }
+
+    /**
+     * Buy four-day passport, method for park guest.
+     * @param handedMoney The money (amount) handed over from park guest. (NotNull, NotMinus)
+     * @throws TicketSoldOutException When ticket in booth is sold out.
+     * @throws TicketShortMoneyException When the specified money is short for purchase.
+     * @return TicketBuyResult The result of the transaction containing the ticket itself and the change
+     */
+    public TicketBuyResult buyFourDayPassport(Integer handedMoney) {
+        return doBuyPassport(TicketType.FOUR_DAY, handedMoney);
+    }
+
+    /**
+     * Buy night-only two-day passport, method for park guest.
+     * @param handedMoney The money (amount) handed over from park guest. (NotNull, NotMinus)
+     * @throws TicketSoldOutException When ticket in booth is sold out.
+     * @throws TicketShortMoneyException When the specified money is short for purchase.
+     * @return TicketBuyResult The result of the transaction containing the ticket itself and the change
+     */
+    public TicketBuyResult buyNightOnlyTwoDayPassport(Integer handedMoney) {
+        return doBuyPassport(TicketType.NIGHT_ONLY_TWO_DAY, handedMoney);
+    }
+
+    private TicketBuyResult doBuyPassport(TicketType type, int handedMoney) {
+        int quantity = quantities.get(type);
+        int price = type.getPrice();
+
+        if (quantity <= 0) {
             throw new TicketSoldOutException("Sold out");
         }
-        if (handedMoney < TWO_DAY_PRICE) {
+        if (handedMoney < price) {
             throw new TicketShortMoneyException("Short money: " + handedMoney);
         }
-        --twoDayPassportQuantity;
+        quantities.put(type, --quantity);
         if (salesProceeds != null) {
-            salesProceeds = salesProceeds + TWO_DAY_PRICE;
-        } else {
-            salesProceeds = TWO_DAY_PRICE;
+            salesProceeds = salesProceeds + price;
+        }else {
+            salesProceeds = price;
         }
-        Integer change = handedMoney - TWO_DAY_PRICE;
-        Ticket twoDayPassport = new Ticket(TicketType.TWO_DAY, TWO_DAY_PRICE);
-        TicketBuyResult ticketBuyResult = new TicketBuyResult(twoDayPassport, change);
+        Integer change = handedMoney - price;
+        Ticket ticket = new Ticket(type, price);
+        TicketBuyResult ticketBuyResult = new TicketBuyResult(ticket, change);
         return ticketBuyResult;
-    }
-
-    public static class TicketSoldOutException extends RuntimeException {
-
-        private static final long serialVersionUID = 1L;
-
-        public TicketSoldOutException(String msg) {
-            super(msg);
-        }
-    }
-
-    public static class TicketShortMoneyException extends RuntimeException {
-
-        private static final long serialVersionUID = 1L;
-
-        public TicketShortMoneyException(String msg) {
-            super(msg);
-        }
     }
 
     // ===================================================================================
     //                                                                            Accessor
     //                                                                            ========
     public int getOneDayPassportQuantity() {
-        return oneDayPassportQuantity;
+        return quantities.get(TicketType.ONE_DAY);
     }
 
     public int getTwoDayPassportQuantity() {
-        return twoDayPassportQuantity;
+        return quantities.get(TicketType.TWO_DAY);
     }
 
     public Integer getSalesProceeds() {

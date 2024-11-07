@@ -15,6 +15,12 @@
  */
 package org.docksidestage.bizfw.basic.buyticket;
 
+import java.time.LocalTime;
+
+import org.docksidestage.bizfw.basic.buyticket.exceptions.TicketInvalidTimeException;
+import org.docksidestage.bizfw.basic.buyticket.exceptions.TicketUsageLimitExceededException;
+import org.docksidestage.bizfw.basic.buyticket.usagepolicy.TicketUsagePolicy;
+
 /**
  * @author jflute
  * @author shiny
@@ -24,44 +30,40 @@ public class Ticket {
     // ===================================================================================
     //                                                                           Attribute
     //                                                                           =========
-    // TODO shiny インスタンス変数の並び順、データの出どころの種類で分けるか？データの使われ方で分けるか？ by jflute (2024/11/06)
+    // TODO done shiny インスタンス変数の並び順、データの出どころの種類で分けるか？データの使われ方で分けるか？ by jflute (2024/11/06)
     // 正解はないですが1on1でフォローした通り色々なパターンあります。納得した形でやってもらえればなのでお任せします。
     private final TicketType type; // can be one-, two- or four-day
-    private int availableDays; // depends on the type of ticket (e.g. two days) and decreases with doInPark
     private final int displayPrice; // written on ticket, park guest can watch this
+    private final TicketUsagePolicy usagePolicy; // behavior of the Ticket which contains a validate mechanism
+
+    private int remainingAvailableDays; // depends on the type of ticket (e.g. two days) and decreases with doInPark
 
     // ===================================================================================
     //                                                                         Constructor
     //                                                                         ===========
     public Ticket(TicketType type, int displayPrice) {
         this.type = type;
-        this.availableDays = calculateAvailableDays(type);
+        this.remainingAvailableDays = type.getAvailableDays();
         this.displayPrice = displayPrice;
+        this.usagePolicy = type.getUsagePolicy();
     }
 
-    private int calculateAvailableDays(TicketType type) {
-        // TODO shiny 修行++: チケット種別が増えたとき、あっちらこっちら修正したくないので...あまりswitch caseの箇所を減らしたい by jflute (2024/11/06)
-        switch (type) {
-        case ONE_DAY:
-            return 1;
-        case TWO_DAY:
-            return 2;
-        case FOUR_DAY:
-            return 4;
-        default:
-            throw new IllegalArgumentException("Unknown TicketType: " + type);
-        }
-    }
+    // TODO done shiny 修行++: チケット種別が増えたとき、あっちらこっちら修正したくないので...あまりswitch caseの箇所を減らしたい by jflute (2024/11/06)
+    // EnumにavailableDaysとpriceを持たせて、Getできるようにしました。こうすることでチケット種別が増える時は、EnumのTypeに加えて、この二つの値を追加するだけですみます。
+    // また、変数の挙動的にはstatic finalと同じようなものを表現できているはずです。
+    // そして、Ticketクラスではこちらの変数との意味の差別化＆Decrementされるのを強調するためRemainingを名前に追加しました。
 
     // ===================================================================================
     //                                                                             In Park
     //                                                                             =======
+    /**
+     * Method called when the guest enters the park with the ticket. Decrements the remainingAvailableDays when the ticket is valid.
+     * @throws TicketUsageLimitExceededException When ticket has been used already and exceeded its usage limit.
+     * @throws TicketInvalidTimeException Currently only applies for night-only ticket. When the guest tries to enter the park before at forbidden time.
+     */
     public void doInPark() {
-        if (!isAvailable()) {
-            throw new IllegalStateException(
-                    "Ticket is unavailable. Already in park by this ticket, exceeding the limit.: displayedPrice=" + displayPrice);
-        }
-        availableDays--;
+        usagePolicy.validate(this);
+        remainingAvailableDays--;
     }
 
     // ===================================================================================
@@ -75,7 +77,7 @@ public class Ticket {
         return displayPrice;
     }
 
-    public boolean isAvailable() {
-        return availableDays > 0;
+    public boolean hasRemainingDays() {
+        return remainingAvailableDays > 0;
     }
 }
