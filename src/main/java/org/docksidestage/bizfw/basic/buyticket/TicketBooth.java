@@ -34,6 +34,7 @@ public class TicketBooth {
     // ===================================================================================
     //                                                                           Attribute
     //                                                                           =========
+    // TODO shiny HashMap使うときは、Mapインターフェースで受け取る習慣がある by jflute (2024/11/13)
     private final HashMap<TicketType, Integer> quantities; // stores the quantity for each ticket type
     private Integer salesProceeds; // null allowed: until first purchase
 
@@ -42,7 +43,7 @@ public class TicketBooth {
     //                                                                         ===========
     public TicketBooth() {
         quantities = new HashMap<>();
-        for (TicketType type: TicketType.values()) {
+        for (TicketType type : TicketType.values()) {
             quantities.put(type, MAX_QUANTITY);
         }
     }
@@ -61,19 +62,29 @@ public class TicketBooth {
     // [jflute memo] javadocの話をした。なんでもかんでもjavadocにするわけじゃないけどpublicとかはわりとjavadoc。
     // [jflute memo] どうしてもコピペせざるを得ないときのテクニックの話。
     // [jflute memo] コード整形用のテキストファイル、エラー保存用のテキストファイルなどの話。
-    // TODO done shiny JavaDoc, 戻り値の説明をお願いします by jflute (2024/11/06)
+    // done shiny JavaDoc, 戻り値の説明をお願いします by jflute (2024/11/06)
+    // TODO shiny [時々tips] 引数、戻り値に (NotNull) 的な情報を載せるというやり方もある by jflute (2024/11/13)
+    // (Javaの標準APIのクラスでも書いてあるものもある e.g. LocalDate@plusDays(), File@listFiles())
+    // TODO shiny @returnの書き方、クラス名なしで大丈夫です。戻り値って一個しかないので何も情報なくても特定できるから。 by jflute (2024/11/13)
+    // 例えば、@paramだったら、どの引数の説明かわからないので、特定するために引数名を入れて説明を入れている。
+    // @throwsだと、複数の例外がthrowされる可能性があるので、それぞれの例外ごとに説明を書いている。
+    // TODO shiny 詳細を列挙するのはわかりやすさを追加するのでGood, な一方で、断定すると違う誤解を生むかもしれない。 by jflute (2024/11/13)
+    // ので、"など", "とか" って付ける。チケットとかお釣りとか「そういうの」が入ってるが伝われば良い。あえてボカす。
+    // TODO shiny [いいね] 列挙は列挙で良いやり方で、具体例があると直感的でわかりやすいというのがあるので。 by jflute (2024/11/13)
+    // あと、高尚な概念的な文章を考えるのって時間が掛かるので、「例えばこういうの」って具体例を挙げるだけの説明でも良い。
+    // (自分は、e.g. で列挙するだけで終了のコメントとかもよく書く)
     /**
      * Buy one-day passport, method for park guest.
      * @param handedMoney The money (amount) handed over from park guest. (NotNull, NotMinus)
      * @throws TicketSoldOutException When ticket in booth is sold out.
      * @throws TicketShortMoneyException When the specified money is short for purchase.
-     * @return TicketBuyResult The result of the transaction containing the ticket itself and the change
+     * @return TicketBuyResult The result of the transaction containing the ticket itself and the change (NotNull)
      */
     public TicketBuyResult buyOneDayPassport(Integer handedMoney) {
         return doBuyPassport(TicketType.ONE_DAY, handedMoney);
     }
 
-    // TODO done shiny JavaDoc, 戻り値の説明をお願いします by jflute (2024/11/06)
+    // done shiny JavaDoc, 戻り値の説明をお願いします by jflute (2024/11/06)
     /**
      * Buy two-day passport, method for park guest.
      * @param handedMoney The money (amount) handed over from park guest. (NotNull, NotMinus)
@@ -107,6 +118,13 @@ public class TicketBooth {
         return doBuyPassport(TicketType.NIGHT_ONLY_TWO_DAY, handedMoney);
     }
 
+    // [1on1でのふぉろー] privateにprivateで切り出して、全体の流れと個々の詳細を分けるというテクニックもある by jflute
+    // shinyさんからの質問: privateに切り出したとき、インスタンス変数の値を直接使うか、引数で渡して独立性を高めるか、迷う。
+    // jflute回答: これは...ぼくも迷う。ただ気にするのは、そのprivateメソッドの独立性を演出するかしないか？そこ次第。
+    // そういう意味では、インスタンス変数の値を直接使うのがデフォルトな感覚で、独立性が必要なときに引数渡しする。
+    // (ただ、独立性が必要なときは、そこまでやるんだったら場合によっては別クラスに切り出すとかかも!?)
+    // 一方で、staticでもいけるprivateでもstaticにはしない。なぜなら、外していいstaticなのに、読み手にそれが伝わらず...
+    // 将来の人が外さずに頑張ろうとしてしまうことの懸念があるから。
     private TicketBuyResult doBuyPassport(TicketType type, int handedMoney) {
         int quantity = quantities.get(type);
         int price = type.getPrice();
@@ -120,9 +138,10 @@ public class TicketBooth {
         quantities.put(type, --quantity);
         if (salesProceeds != null) {
             salesProceeds = salesProceeds + price;
-        }else {
+        } else {
             salesProceeds = price;
         }
+        // TODO shiny [いいね] changeをいったん変数で受けてるのわかりやすい by jflute (2024/11/13)
         Integer change = handedMoney - price;
         Ticket ticket = new Ticket(type, price);
         TicketBuyResult ticketBuyResult = new TicketBuyResult(ticket, change);

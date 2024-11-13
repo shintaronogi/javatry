@@ -19,10 +19,10 @@ import java.time.LocalTime;
 
 import org.docksidestage.bizfw.basic.buyticket.Ticket;
 import org.docksidestage.bizfw.basic.buyticket.TicketBooth;
-import org.docksidestage.bizfw.basic.buyticket.exceptions.TicketInvalidTimeException;
-import org.docksidestage.bizfw.basic.buyticket.exceptions.TicketShortMoneyException;
 import org.docksidestage.bizfw.basic.buyticket.TicketBuyResult;
 import org.docksidestage.bizfw.basic.buyticket.TicketType;
+import org.docksidestage.bizfw.basic.buyticket.exceptions.TicketInvalidTimeException;
+import org.docksidestage.bizfw.basic.buyticket.exceptions.TicketShortMoneyException;
 import org.docksidestage.unit.PlainTestCase;
 
 /**
@@ -158,7 +158,7 @@ public class Step05ClassTest extends PlainTestCase {
         log(booth.getOneDayPassportQuantity(), booth.getSalesProceeds()); // should be same as before-fix
     }
     // ただのコメント：ん？なんで差分でてる？と思ったら、IntelliJのRefactor昨日で関数名変えたからだ
-    // TODO done shiny 在庫を分けた状態のまま、doBuyPassport()的なメソッドを作ってみましょう by jflute (2024/11/06)
+    // done shiny 在庫を分けた状態のまま、doBuyPassport()的なメソッドを作ってみましょう by jflute (2024/11/06)
     // (1on1でのふぉろー: doBuyのdoって？)
     // 在庫は別々の変数で管理するのではなくて、Hashmapを使い一元管理する方法を選びました。
     // 最大在庫数は一律10なのでコンストラクタで一気に値を初期化する方法をとっています。
@@ -286,6 +286,7 @@ public class Step05ClassTest extends PlainTestCase {
         TicketBuyResult buyResult = booth.buyNightOnlyTwoDayPassport(handedMoney);
         Ticket nightOnlyTwoDayPassport = buyResult.getTicket();
 
+        // TODO jflute 次回の1on1でチェックのところをじっくり見させてもらう (2024/11/13)
         log(nightOnlyTwoDayPassport.hasRemainingDays());
         // ただのコメント：あ、ローカルのタイムベースなので18:00以降でないとエラー出る（という仕様なのですが...w）
         try {

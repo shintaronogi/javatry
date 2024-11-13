@@ -15,8 +15,6 @@
  */
 package org.docksidestage.bizfw.basic.buyticket;
 
-import java.time.LocalTime;
-
 import org.docksidestage.bizfw.basic.buyticket.exceptions.TicketInvalidTimeException;
 import org.docksidestage.bizfw.basic.buyticket.exceptions.TicketUsageLimitExceededException;
 import org.docksidestage.bizfw.basic.buyticket.usagepolicy.TicketUsagePolicy;
@@ -30,7 +28,7 @@ public class Ticket {
     // ===================================================================================
     //                                                                           Attribute
     //                                                                           =========
-    // TODO done shiny インスタンス変数の並び順、データの出どころの種類で分けるか？データの使われ方で分けるか？ by jflute (2024/11/06)
+    // done shiny インスタンス変数の並び順、データの出どころの種類で分けるか？データの使われ方で分けるか？ by jflute (2024/11/06)
     // 正解はないですが1on1でフォローした通り色々なパターンあります。納得した形でやってもらえればなのでお任せします。
     private final TicketType type; // can be one-, two- or four-day
     private final int displayPrice; // written on ticket, park guest can watch this
@@ -62,6 +60,7 @@ public class Ticket {
      * @throws TicketInvalidTimeException Currently only applies for night-only ticket. When the guest tries to enter the park before at forbidden time.
      */
     public void doInPark() {
+        // TODO shiny [いいね] しっかり流れのメソッドになっててわかりやすい！ by jflute (2024/11/13)
         usagePolicy.validate(this);
         remainingAvailableDays--;
     }
