@@ -46,7 +46,7 @@ public class Ticket {
         this.usagePolicy = type.getUsagePolicy();
     }
 
-    // TODO done shiny 修行++: チケット種別が増えたとき、あっちらこっちら修正したくないので...あまりswitch caseの箇所を減らしたい by jflute (2024/11/06)
+    // done shiny 修行++: チケット種別が増えたとき、あっちらこっちら修正したくないので...あまりswitch caseの箇所を減らしたい by jflute (2024/11/06)
     // EnumにavailableDaysとpriceを持たせて、Getできるようにしました。こうすることでチケット種別が増える時は、EnumのTypeに加えて、この二つの値を追加するだけですみます。
     // また、変数の挙動的にはstatic finalと同じようなものを表現できているはずです。
     // そして、Ticketクラスではこちらの変数との意味の差別化＆Decrementされるのを強調するためRemainingを名前に追加しました。
@@ -60,10 +60,25 @@ public class Ticket {
      * @throws TicketInvalidTimeException Currently only applies for night-only ticket. When the guest tries to enter the park before at forbidden time.
      */
     public void doInPark() {
-        // TODO shiny [いいね] しっかり流れのメソッドになっててわかりやすい！ by jflute (2024/11/13)
+        // done shiny [いいね] しっかり流れのメソッドになっててわかりやすい！ by jflute (2024/11/13)
         usagePolicy.validate(this);
         remainingAvailableDays--;
     }
+
+    // ===================================================================================
+    //                                                                      Basic Override
+    //                                                                      ==============
+    // TODO shiny toString()の参考実装です。(フレームワークとか何も使わないときの例) by jflute (2024/11/21)
+    //@Override
+    //public String toString() {
+    //    // typeから導出できるものは省略してもいいかなと思って除外している
+    //    return getClass().getName() + ":{" + type + ", " + remainingAvailableDays + "}";
+    //}
+    //
+    // まあ実際の現場では、実装を手軽にするために専用のクラスを使っちゃったりします。
+    // 以下は、LastaFluteというぼくが作ってるフレームワークの例ですが、他のフレームワークでも似たようなものがあります。
+    // // 気軽なtoString() | LastaFlute
+    // https://dbflute.seasar.org/ja/lastaflute/howto/impldesign/beandesign.html#latostring
 
     // ===================================================================================
     //                                                                            Accessor
