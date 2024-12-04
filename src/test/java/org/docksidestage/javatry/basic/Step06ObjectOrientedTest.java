@@ -18,7 +18,6 @@ package org.docksidestage.javatry.basic;
 import org.docksidestage.bizfw.basic.buyticket.Ticket;
 import org.docksidestage.bizfw.basic.buyticket.TicketBooth;
 import org.docksidestage.bizfw.basic.buyticket.TicketType;
-import org.docksidestage.bizfw.basic.buyticket.usagepolicy.RegularTicketUsagePolicy;
 import org.docksidestage.bizfw.basic.objanimal.Animal;
 import org.docksidestage.bizfw.basic.objanimal.BarkedSound;
 import org.docksidestage.bizfw.basic.objanimal.Cat;
@@ -74,7 +73,7 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
         // そしてNullpointerExceptionを避けるためIfで分岐する（が、salesProceedsの初期値を0、またはPrimitive型にする方がいいと思う）
         if (salesProceeds == null) {
             salesProceeds = oneDayPrice;
-        }else {
+        } else {
             salesProceeds += oneDayPrice;
         }
 
@@ -147,7 +146,6 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
         //Ticket ticket = booth.buyOneDayPassport(10000);
         booth.buyOneDayPassport(10000); // as temporary, remove if you finished step05
         Ticket ticket = new Ticket(TicketType.ONE_DAY, 7400); // also here (Step5中にエラー出るので一旦ここは合わせて回避)
-
 
         // *buyOneDayPassport() has this process:
         //if (quantity <= 0) {
@@ -329,7 +327,12 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
         // 逆に：依存性が高いと拡張や修正するときのコストが高くなる
         // 例えば：コードやテストがDogだけに依存していると、Dogが廃止になってDog2とかで書き換えないといけない時に全て書き換えないといけなくなる
         //
-        // けど...TODO jflute サブクラスの独自メソッドを定義した場合（Overrideではない）、スーパークラスからは呼び出せないということが起きる。なので設計的にはそういうことをしないというのがベストプラクティスだったりするんですか？
+        // けど...done jflute サブクラスの独自メソッドを定義した場合（Overrideではない）、
+        // スーパークラスからは呼び出せないということが起きる。
+        // なので設計的にはそういうことをしないというのがベストプラクティスだったりするんですか？
+        // [1on1でのふぉろー] 具象のメソッドを呼ぶ必要があるなら具象に依存してるってことなのでそもそも抽象的に扱う必要がない。
+        // 具象のメソッドを呼ばず抽象クラスのメソッドで事足りるのであれば、それは抽象クラスにだけ概念的に依存してるということ。
+        // 実際、抽象概念にだけ依存していれば良いケースというのが多いので、そのときは抽象的に扱いましょうという感じ。
         // _/_/_/_/_/_/_/_/_/_/
     }
 

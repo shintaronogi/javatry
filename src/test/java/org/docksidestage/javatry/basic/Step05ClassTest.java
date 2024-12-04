@@ -286,7 +286,7 @@ public class Step05ClassTest extends PlainTestCase {
         TicketBuyResult buyResult = booth.buyNightOnlyTwoDayPassport(handedMoney);
         Ticket nightOnlyTwoDayPassport = buyResult.getTicket();
 
-        // TODO jflute 次回の1on1でチェックのところをじっくり見させてもらう (2024/11/13)
+        // done jflute 次回の1on1でチェックのところをじっくり見させてもらう (2024/11/13)
         log(nightOnlyTwoDayPassport.hasRemainingDays());
         // ただのコメント：あ、ローカルのタイムベースなので18:00以降でないとエラー出る（という仕様なのですが...w）
         try {

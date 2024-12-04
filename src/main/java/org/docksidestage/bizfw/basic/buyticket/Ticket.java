@@ -68,7 +68,7 @@ public class Ticket {
     // ===================================================================================
     //                                                                      Basic Override
     //                                                                      ==============
-    // TODO done shiny toString()の参考実装です。(フレームワークとか何も使わないときの例) by jflute (2024/11/21)
+    // done shiny toString()の参考実装です。(フレームワークとか何も使わないときの例) by jflute (2024/11/21)
     @Override
     public String toString() {
         // typeから導出できるものは省略してもいいかなと思って除外している

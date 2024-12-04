@@ -12,9 +12,9 @@ import org.docksidestage.bizfw.basic.buyticket.exceptions.TicketUsageLimitExceed
 public class NightOnlyTicketUsagePolicy implements TicketUsagePolicy {
     @Override
     public void validate(Ticket ticket) {
-        // TODO done shiny [読み物課題] 例外メッセージ、敬語で満足でもロスロスパターン by jflute (2024/11/21)
+        // done shiny [読み物課題] 例外メッセージ、敬語で満足でもロスロスパターン by jflute (2024/11/21)
         // https://jflute.hatenadiary.jp/entry/20170804/explossloss
-        // TODO done shiny [ふぉろー] 一方で、ticketを単純に + するだけではTicketの情報は出てこないです。 by jflute (2024/11/21)
+        // done shiny [ふぉろー] 一方で、ticketを単純に + するだけではTicketの情報は出てこないです。 by jflute (2024/11/21)
         //  e.g. "...exhausted: " + ticket;
         //
         // この場合、toString()メソッドが内部的には呼び出されます。
@@ -25,6 +25,7 @@ public class NightOnlyTicketUsagePolicy implements TicketUsagePolicy {
         // Ticketクラス側でtoString()をオーバーライドすると良いです。
         // Ticketクラスの方で参考実装を載せておきますね。
         //
+        // TODO shiny ということで、ロスロスパターンを避けましょう by jflute (2024/12/04)
         if (!ticket.hasRemainingDays()) {
             throw new TicketUsageLimitExceededException("Ticket is unavailable. Remaining days are exhausted.");
         }
@@ -36,7 +37,7 @@ public class NightOnlyTicketUsagePolicy implements TicketUsagePolicy {
 
     // [1on1でのふぉろー] staticの使いどころの話をした。
     // Javaは機能がてんこ盛りなので、それぞれの機能をどの程度使うか？ってさじ加減が発生する。
-    // TODO done shiny 必要になるまではprivateにしておいていいかなと by jflute (2024/11/21)
+    // done shiny 必要になるまではprivateにしておいていいかなと by jflute (2024/11/21)
     // もしくは、staticを除去してサブクラス固有のメソッドとして公開しておくか...
     // 本気なら別クラスに切り出し。
     private boolean isNightTime() {
