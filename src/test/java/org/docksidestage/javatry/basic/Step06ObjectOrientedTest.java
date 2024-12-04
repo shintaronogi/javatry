@@ -65,11 +65,18 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
         if (quantity <= 0) {
             throw new IllegalStateException("Sold out");
         }
-        --quantity;
         if (handedMoney < oneDayPrice) {
             throw new IllegalStateException("Short money: handedMoney=" + handedMoney);
         }
-        salesProceeds = handedMoney;
+        // step05同様、quantityをDecrementする場所はExceptionの後であるべき
+        --quantity;
+        // step05同様、salesProceeds(売上)は、チケットの値段に依存するべきである
+        // そしてNullpointerExceptionを避けるためIfで分岐する（が、salesProceedsの初期値を0、またはPrimitive型にする方がいいと思う）
+        if (salesProceeds == null) {
+            salesProceeds = oneDayPrice;
+        }else {
+            salesProceeds += oneDayPrice;
+        }
 
         //
         // [ticket info]
@@ -87,13 +94,15 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
         //
         // simulation: actually this process should be called by other trigger
         if (alreadyIn) {
-            throw new IllegalStateException("Already in park by this ticket: displayPrice=" + quantity);
+            // displayPrice =とするならば、DisplayPriceをログ出しするべき。
+            throw new IllegalStateException("Already in park by this ticket: displayPrice=" + displayPrice);
         }
         alreadyIn = true;
 
         //
         // [final process]
         //
+        // 一般的に引数多いメソッドは避けるべきだと思う。プログラミングエラーを起こしやすい。関連するものたちはObjectなどで管理するべき。
         saveBuyingHistory(quantity, displayPrice, salesProceeds, alreadyIn);
     }
 
@@ -194,7 +203,11 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
     // write your memo here:
     // _/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
     // what is object?
-    //
+    // オブジェクトは、「クラスという物や概念を抽象したもの」を具体的に表現したもの。車 → Toyota社の何とかモデル、動物 → 猫・犬などなど、、
+    // これによって人間にとって直感的に理解しやすく、「コード」という一見意味不明なものが「わかりやすく意味を持つもの」となると個人的には思っている。
+    // また抽象化して共通かすることによって、コードを再利用しやすくしたり、独立性を持つことによって責任範囲をそれぞれに持たせたりできる。
+    // さらに、継承という概念を使って拡張しやすくしたりできる。
+    // カプセル化して外部から隠蔽したり！（めっちゃ出てくる）
     // _/_/_/_/_/_/_/_/_/_/
 
     // ===================================================================================
@@ -208,9 +221,16 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
         Dog dog = new Dog();
         BarkedSound sound = dog.bark();
         String sea = sound.getBarkWord();
-        log(sea); // your answer? => 
+        log(sea); // your answer? => wan
+        // 背景：DogクラスはAnimalクラスを継承しているクラス
+        // Animalクラスには、bark()メソッドがありその中でAbstractなgetBarkWord()メソッドからBarkwordを取得し、その言葉をもったBarksoundクラスのオブジェクトを返す
+        // getBarkWord()はDogクラスでImplementされていて、wanを返すようになっている
+        // したがって、その言葉をGetするgetBarkWord()はwanを返す
         int land = dog.getHitPoint();
-        log(land); // your answer? => 
+        log(land); // your answer? => 7
+        // 背景：bark()メソッドの中でhpをDecrementするdownHitPoint()メソッドが3回呼ばれていいるため
+        //
+        // 答え：正解でした。
     }
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
@@ -218,9 +238,13 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
         Animal animal = new Dog();
         BarkedSound sound = animal.bark();
         String sea = sound.getBarkWord();
-        log(sea); // your answer? => 
+        log(sea); // your answer? => wan
         int land = animal.getHitPoint();
-        log(land); // your answer? => 
+        log(land); // your answer? => 7
+        // 背景：Polymorphismの基本的な考え方の一つで、名前は確かアップキャスティング？って呼ばれているはず
+        // 継承したクラスの参照を親クラスに代入することは問題なくできる（利点は様々）
+        //
+        // 答え：正解でした。
     }
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
@@ -228,9 +252,13 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
         Animal animal = createAnyAnimal();
         BarkedSound sound = animal.bark();
         String sea = sound.getBarkWord();
-        log(sea); // your answer? => 
+        log(sea); // your answer? => wan
         int land = animal.getHitPoint();
-        log(land); // your answer? => 
+        log(land); // your answer? => 7
+        // 背景：Factoryパターンにちょっと似ている。createAnyAnimal() (メソッド名は一旦置いておいて)は、新しいDog() -> Animalインスタンスを返すので、
+        // やっていることは実質上と同じ。
+        //
+        // 答え：正解でした。
     }
 
     private Animal createAnyAnimal() {
@@ -246,9 +274,12 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
     private void doAnimalSeaLand_for_4th(Animal animal) {
         BarkedSound sound = animal.bark();
         String sea = sound.getBarkWord();
-        log(sea); // your answer? => 
+        log(sea); // your answer? => wan
         int land = animal.getHitPoint();
-        log(land); // your answer? => 
+        log(land); // your answer? => 7
+        // 背景：やっている事としてはまたまた上のエクササイズと一緒で、違いとしては今度はDogクラスのインスタンスを外から関数に渡しているということ
+        //
+        // 答え：正解でした。
     }
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
@@ -256,9 +287,15 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
         Animal animal = new Cat();
         BarkedSound sound = animal.bark();
         String sea = sound.getBarkWord();
-        log(sea); // your answer? => 
+        log(sea); // your answer? => nya-
         int land = animal.getHitPoint();
-        log(land); // your answer? => 
+        log(land); // your answer? => 5
+        // 背景：今回は、AnimalクラスをExtendした別のCatクラスの実装
+        // Dogとの違いの一つがdownHitPoint()がOverrideされていて、HPが偶数の時さらにHPが１下がるという事
+        // downHipPoint()は上記同様3回呼ばれているので、加えて-2され５になる
+        // さらに鳴き声はnya-になっている...笑
+        //
+        // 答え：正解でした。
     }
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
@@ -266,9 +303,13 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
         Animal animal = new Zombie();
         BarkedSound sound = animal.bark();
         String sea = sound.getBarkWord();
-        log(sea); // your answer? => 
+        log(sea); // your answer? => uooo
         int land = animal.getHitPoint();
-        log(land); // your answer? => 
+        log(land); // your answer? => -1
+        // 背景：鳴き声(getBarkWord)は、uoooを返すようにOverrideされている
+        // constructor内で呼ばれるgetInitialHitPoint()がOverrideされて、-1が返されるようになっている（ゾンビだからか）
+        //
+        // 答え：正解でした。
     }
 
     /**
@@ -280,6 +321,15 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
         // _/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
         // what is happy?
         //
+        // 依存性の低さによる、設計の柔軟性やテストのしやすさだったり使い回しや簡単な置き換えが実現できることがPolymorphismの利点だと思っている。
+        // 上にもあるとおり、メソッドの引数をAnimal animalにすることで異なるサブクラスを渡せたり、
+        // List<Animal> animalsというリストを作って、Appendし、ループで呼び出せたり...などなど
+        // サブクラスが増える場合も含めて、安全に「使いまわせて」拡張性が高いというのを実現できる
+        // さらに、Animal animalしておくことで右側がDogからCatに置き換わっても修正量が減る。
+        // 逆に：依存性が高いと拡張や修正するときのコストが高くなる
+        // 例えば：コードやテストがDogだけに依存していると、Dogが廃止になってDog2とかで書き換えないといけない時に全て書き換えないといけなくなる
+        //
+        // けど...TODO jflute サブクラスの独自メソッドを定義した場合（Overrideではない）、スーパークラスからは呼び出せないということが起きる。なので設計的にはそういうことをしないというのがベストプラクティスだったりするんですか？
         // _/_/_/_/_/_/_/_/_/_/
     }
 
@@ -290,18 +340,32 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
     public void test_objectOriented_polymorphism_interface_dispatch() {
         Loudable loudable = new Zombie();
         String sea = loudable.soundLoudly();
-        log(sea); // your answer? => 
+        log(sea); // your answer? => uooo
         String land = ((Zombie) loudable).bark().getBarkWord();
-        log(land); // your answer? => 
+        log(land); // your answer? => uooo
+        // まず、Loudableはインターフェース
+        // インターフェースはClassとちょっと似てて型として左側に定義できる
+        // また、インターフェースは振る舞いを定義するものであり、メソッドしか定義できない（Abstract Classとはちょっと違う）
+        // Animalクラスをみてみると、ImplementsでLoudableが実装されている。
+        // 実装では、soundLoudly()関数がOverrideされていて、barksoundをGetするメソッドとなっている
+        // したがって、seaの中身はuooになる
+        // また、下の部分も本質的にやっていることは一緒でloudableをZombieにキャスティングすることで、soundLoudlyの内部実装と同じことをして、barksoundを返している
+        // したがって、landの中身もuooになる
+        //
+        // 答え：正解でした。
     }
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
     public void test_objectOriented_polymorphism_interface_hierarchy() {
         Loudable loudable = new AlarmClock();
         String sea = loudable.soundLoudly();
-        log(sea); // your answer? => 
+        log(sea); // your answer? => jiri jiri..
         boolean land = loudable instanceof Animal;
-        log(land); // your answer? => 
+        log(land); // your answer? => false
+        // AlarmClockはLoudableを実装してて独自のsoundLoudly関数が定義されている
+        // だが、AlarmClockはAnimalのインスタンスではないのでlandはFalseになる
+        //
+        // 答え：正解でした。
     }
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
@@ -309,9 +373,13 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
         Animal seaAnimal = new Cat();
         Animal landAnimal = new Zombie();
         boolean sea = seaAnimal instanceof FastRunner;
-        log(sea); // your answer? => 
+        log(sea); // your answer? => true
         boolean land = landAnimal instanceof FastRunner;
-        log(land); // your answer? => 
+        log(land); // your answer? => false
+        // CatクラスとZombieクラスをみてみると、それぞれFastRunnerインターフェースを継承している・していない
+        // Catはしているのに対して、Zombieはしていないので、seaはTrueになり、landはFalseになる
+        //
+        // 答え：正解でした。
     }
 
     /**
@@ -320,6 +388,15 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
      */
     public void test_objectOriented_polymorphism_interface_runnerImpl() {
         // your confirmation code here
+        Animal dog = new Dog();
+        log(dog instanceof FastRunner); // → should be true
+
+        log(dog.getHitPoint()); // → should be 10
+
+        FastRunner fastRunner = (FastRunner) dog;
+        fastRunner.run();
+
+        log(dog.getHitPoint()); // → should be 9
     }
 
     /**

@@ -15,11 +15,13 @@
  */
 package org.docksidestage.bizfw.basic.objanimal;
 
+import org.docksidestage.bizfw.basic.objanimal.runner.FastRunner;
+
 /**
  * The object for dog(犬).
  * @author jflute
  */
-public class Dog extends Animal {
+public class Dog extends Animal implements FastRunner {
 
     // ===================================================================================
     //                                                                         Constructor
@@ -32,5 +34,10 @@ public class Dog extends Animal {
     //                                                                              ======
     protected String getBarkWord() {
         return "wan"; // bow? in English
+    }
+
+    @Override
+    public void run() {
+        downHitPoint();
     }
 }

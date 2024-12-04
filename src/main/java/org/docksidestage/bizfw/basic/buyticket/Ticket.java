@@ -68,12 +68,12 @@ public class Ticket {
     // ===================================================================================
     //                                                                      Basic Override
     //                                                                      ==============
-    // TODO shiny toString()の参考実装です。(フレームワークとか何も使わないときの例) by jflute (2024/11/21)
-    //@Override
-    //public String toString() {
-    //    // typeから導出できるものは省略してもいいかなと思って除外している
-    //    return getClass().getName() + ":{" + type + ", " + remainingAvailableDays + "}";
-    //}
+    // TODO done shiny toString()の参考実装です。(フレームワークとか何も使わないときの例) by jflute (2024/11/21)
+    @Override
+    public String toString() {
+        // typeから導出できるものは省略してもいいかなと思って除外している
+        return getClass().getName() + ":{" + type + ", " + remainingAvailableDays + "}";
+    }
     //
     // まあ実際の現場では、実装を手軽にするために専用のクラスを使っちゃったりします。
     // 以下は、LastaFluteというぼくが作ってるフレームワークの例ですが、他のフレームワークでも似たようなものがあります。

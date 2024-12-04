@@ -16,6 +16,7 @@
 package org.docksidestage.bizfw.basic.buyticket;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import org.docksidestage.bizfw.basic.buyticket.exceptions.TicketShortMoneyException;
 import org.docksidestage.bizfw.basic.buyticket.exceptions.TicketSoldOutException;
@@ -34,8 +35,8 @@ public class TicketBooth {
     // ===================================================================================
     //                                                                           Attribute
     //                                                                           =========
-    // TODO shiny HashMap使うときは、Mapインターフェースで受け取る習慣がある by jflute (2024/11/13)
-    private final HashMap<TicketType, Integer> quantities; // stores the quantity for each ticket type
+    // TODO done shiny HashMap使うときは、Mapインターフェースで受け取る習慣がある by jflute (2024/11/13)
+    private final Map<TicketType, Integer> quantities; // stores the quantity for each ticket type
     private Integer salesProceeds; // null allowed: until first purchase
 
     // ===================================================================================
@@ -63,14 +64,14 @@ public class TicketBooth {
     // [jflute memo] どうしてもコピペせざるを得ないときのテクニックの話。
     // [jflute memo] コード整形用のテキストファイル、エラー保存用のテキストファイルなどの話。
     // done shiny JavaDoc, 戻り値の説明をお願いします by jflute (2024/11/06)
-    // TODO shiny [時々tips] 引数、戻り値に (NotNull) 的な情報を載せるというやり方もある by jflute (2024/11/13)
+    // TODO done shiny [時々tips] 引数、戻り値に (NotNull) 的な情報を載せるというやり方もある by jflute (2024/11/13)
     // (Javaの標準APIのクラスでも書いてあるものもある e.g. LocalDate@plusDays(), File@listFiles())
-    // TODO shiny @returnの書き方、クラス名なしで大丈夫です。戻り値って一個しかないので何も情報なくても特定できるから。 by jflute (2024/11/13)
+    // TODO done shiny @returnの書き方、クラス名なしで大丈夫です。戻り値って一個しかないので何も情報なくても特定できるから。 by jflute (2024/11/13)
     // 例えば、@paramだったら、どの引数の説明かわからないので、特定するために引数名を入れて説明を入れている。
     // @throwsだと、複数の例外がthrowされる可能性があるので、それぞれの例外ごとに説明を書いている。
-    // TODO shiny 詳細を列挙するのはわかりやすさを追加するのでGood, な一方で、断定すると違う誤解を生むかもしれない。 by jflute (2024/11/13)
+    // TODO done shiny 詳細を列挙するのはわかりやすさを追加するのでGood, な一方で、断定すると違う誤解を生むかもしれない。 by jflute (2024/11/13)
     // ので、"など", "とか" って付ける。チケットとかお釣りとか「そういうの」が入ってるが伝われば良い。あえてボカす。
-    // TODO shiny [いいね] 列挙は列挙で良いやり方で、具体例があると直感的でわかりやすいというのがあるので。 by jflute (2024/11/13)
+    // TODO done shiny [いいね] 列挙は列挙で良いやり方で、具体例があると直感的でわかりやすいというのがあるので。 by jflute (2024/11/13)
     // あと、高尚な概念的な文章を考えるのって時間が掛かるので、「例えばこういうの」って具体例を挙げるだけの説明でも良い。
     // (自分は、e.g. で列挙するだけで終了のコメントとかもよく書く)
     /**
@@ -78,7 +79,7 @@ public class TicketBooth {
      * @param handedMoney The money (amount) handed over from park guest. (NotNull, NotMinus)
      * @throws TicketSoldOutException When ticket in booth is sold out.
      * @throws TicketShortMoneyException When the specified money is short for purchase.
-     * @return TicketBuyResult The result of the transaction containing the ticket itself and the change (NotNull)
+     * @return The result of the transaction containing the ticket itself, the change, etc. (NotNull)
      */
     public TicketBuyResult buyOneDayPassport(Integer handedMoney) {
         return doBuyPassport(TicketType.ONE_DAY, handedMoney);
@@ -90,7 +91,7 @@ public class TicketBooth {
      * @param handedMoney The money (amount) handed over from park guest. (NotNull, NotMinus)
      * @throws TicketSoldOutException When ticket in booth is sold out.
      * @throws TicketShortMoneyException When the specified money is short for purchase.
-     * @return TicketBuyResult The result of the transaction containing the ticket itself and the change
+     * @return The result of the transaction containing the ticket itself, the change, etc. (NotNull)
      */
     public TicketBuyResult buyTwoDayPassport(Integer handedMoney) {
         return doBuyPassport(TicketType.TWO_DAY, handedMoney);
@@ -101,7 +102,7 @@ public class TicketBooth {
      * @param handedMoney The money (amount) handed over from park guest. (NotNull, NotMinus)
      * @throws TicketSoldOutException When ticket in booth is sold out.
      * @throws TicketShortMoneyException When the specified money is short for purchase.
-     * @return TicketBuyResult The result of the transaction containing the ticket itself and the change
+     * @return The result of the transaction containing the ticket itself, the change, etc. (NotNull)
      */
     public TicketBuyResult buyFourDayPassport(Integer handedMoney) {
         return doBuyPassport(TicketType.FOUR_DAY, handedMoney);
@@ -112,7 +113,7 @@ public class TicketBooth {
      * @param handedMoney The money (amount) handed over from park guest. (NotNull, NotMinus)
      * @throws TicketSoldOutException When ticket in booth is sold out.
      * @throws TicketShortMoneyException When the specified money is short for purchase.
-     * @return TicketBuyResult The result of the transaction containing the ticket itself and the change
+     * @return The result of the transaction containing the ticket itself, the change, etc.  (NotNull)
      */
     public TicketBuyResult buyNightOnlyTwoDayPassport(Integer handedMoney) {
         return doBuyPassport(TicketType.NIGHT_ONLY_TWO_DAY, handedMoney);
@@ -141,7 +142,7 @@ public class TicketBooth {
         } else {
             salesProceeds = price;
         }
-        // TODO shiny [いいね] changeをいったん変数で受けてるのわかりやすい by jflute (2024/11/13)
+        // TODO done shiny [いいね] changeをいったん変数で受けてるのわかりやすい by jflute (2024/11/13)
         Integer change = handedMoney - price;
         Ticket ticket = new Ticket(type, price);
         TicketBuyResult ticketBuyResult = new TicketBuyResult(ticket, change);
