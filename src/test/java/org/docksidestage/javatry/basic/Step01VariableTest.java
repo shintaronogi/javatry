@@ -28,6 +28,13 @@ import org.docksidestage.unit.PlainTestCase;
 
 // TODO jflute 1on1にて、背景コメントの補足をちょこっとずつやっていく (2024/10/02)
 // http://dbflute.seasar.org/ja/tutorial/handson/review/codingpolicy.html#backgroundcomment
+// [1on1にてふぉろー] (2024/12/11)
+// // オートマティックおうむ返しコメントより背景や理由を
+// https://jflute.hatenadiary.jp/entry/20180625/repeatablecomment
+// そして、コメント談義。jfluteのオープンソースのコメント例。自分がメンテする想定。ピンポイント背景コメント。
+// 一方で、jfluteの業務でコード書く場合のコメント例。誰がメンテするかわからないのでコメント多め。
+// https://github.com/lastaflute/lastaflute-example-maihama/blob/master/maihama-orleans/src/main/java/org/docksidestage/bizfw/job/contributed/NxBatchRecorder.java
+// 次回は、DBコメントもコメントの補足もする予定。
 
 // done shiny クラスのJavaDocのauthorの修正をお願いします by jflute (2024/10/09)
 // // 3. 最低限のクラスJavaDoc | ハンズオンのコーディングポリシー
