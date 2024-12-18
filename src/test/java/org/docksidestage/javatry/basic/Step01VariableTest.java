@@ -34,7 +34,22 @@ import org.docksidestage.unit.PlainTestCase;
 // そして、コメント談義。jfluteのオープンソースのコメント例。自分がメンテする想定。ピンポイント背景コメント。
 // 一方で、jfluteの業務でコード書く場合のコメント例。誰がメンテするかわからないのでコメント多め。
 // https://github.com/lastaflute/lastaflute-example-maihama/blob/master/maihama-orleans/src/main/java/org/docksidestage/bizfw/job/contributed/NxBatchRecorder.java
+//
 // 次回は、DBコメントもコメントの補足もする予定。
+// // コードにコメント書くのにDBにコメント書かないの？
+// https://jflute.hatenadiary.jp/entry/20170628/letsdbcomment
+// DBFlute Intro の decomment の話もした
+//
+// 次回は、メソッド名や変数名もコメントの補足もする予定。
+
+// 
+// "似たこと思ってて、ドキュメント書けるからこそ上手に省略もできると。
+// 何のドキュメントがあると嬉しくて何はなくてもいいのか？の判断は書けるからこそできるのかなって。
+// これコード上のコメントも同じで。"
+// https://x.com/jflute/status/1861717867600941356
+//
+// 「フレームワークとかライブラリとか、中身の挙動をわかってこそ、ちゃんと使いこなせる」 by shiny
+//
 
 // done shiny クラスのJavaDocのauthorの修正をお願いします by jflute (2024/10/09)
 // // 3. 最低限のクラスJavaDoc | ハンズオンのコーディングポリシー
