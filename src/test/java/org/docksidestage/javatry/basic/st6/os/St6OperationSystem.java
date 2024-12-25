@@ -18,7 +18,7 @@ package org.docksidestage.javatry.basic.st6.os;
 /**
  * @author jflute
  */
-public class St6OperationSystem {
+public abstract class St6OperationSystem {
 
     // ===================================================================================
     //                                                                          Definition
@@ -32,6 +32,7 @@ public class St6OperationSystem {
     //                                                                           =========
     private final String osType;
     private final String loginId;
+    // TODO: jflute 親クラスで定義されたAttributeに子クラスからアクセスする方法はでprotectedを使うのってどうなんだろうという疑問。(あまりみたことない)
 
     // ===================================================================================
     //                                                                         Constructor
@@ -51,27 +52,18 @@ public class St6OperationSystem {
         return resourcePath.replace("/", fileSeparator);
     }
 
-    protected String getFileSeparator() {
-        if (OS_TYPE_MAC.equalsIgnoreCase(osType)) {
-            return "/";
-        } else if (OS_TYPE_WINDOWS.equalsIgnoreCase(osType)) {
-            return "\\";
-        } else if (OS_TYPE_OLD_WINDOWS.equalsIgnoreCase(osType)) {
-            return "\\";
-        } else {
-            throw new IllegalStateException("Unknown osType: " + osType);
-        }
+    protected abstract String getFileSeparator();
+
+    protected abstract String getUserDirectory();
+
+    // ===================================================================================
+    //                                                                            Accessor
+    //
+    public String getOsType() {
+        return osType;
     }
 
-    protected String getUserDirectory() {
-        if (OS_TYPE_MAC.equalsIgnoreCase(osType)) {
-            return "/Users/" + loginId;
-        } else if (OS_TYPE_WINDOWS.equalsIgnoreCase(osType)) {
-            return "/Users/" + loginId;
-        } else if (OS_TYPE_OLD_WINDOWS.equalsIgnoreCase(osType)) {
-            return "/Documents and Settigs/" + loginId;
-        } else {
-            throw new IllegalStateException("Unknown osType: " + osType);
-        }
+    public String getLoginId() {
+        return loginId;
     }
 }

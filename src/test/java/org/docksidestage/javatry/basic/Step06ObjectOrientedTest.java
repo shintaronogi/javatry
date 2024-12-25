@@ -18,14 +18,16 @@ package org.docksidestage.javatry.basic;
 import org.docksidestage.bizfw.basic.buyticket.Ticket;
 import org.docksidestage.bizfw.basic.buyticket.TicketBooth;
 import org.docksidestage.bizfw.basic.buyticket.TicketType;
-import org.docksidestage.bizfw.basic.objanimal.Animal;
-import org.docksidestage.bizfw.basic.objanimal.BarkedSound;
-import org.docksidestage.bizfw.basic.objanimal.Cat;
-import org.docksidestage.bizfw.basic.objanimal.Dog;
-import org.docksidestage.bizfw.basic.objanimal.Zombie;
+import org.docksidestage.bizfw.basic.objanimal.*;
+import org.docksidestage.bizfw.basic.objanimal.flyable.Flyable;
 import org.docksidestage.bizfw.basic.objanimal.loud.AlarmClock;
 import org.docksidestage.bizfw.basic.objanimal.loud.Loudable;
 import org.docksidestage.bizfw.basic.objanimal.runner.FastRunner;
+import org.docksidestage.javatry.basic.st6.dbms.St6MySql;
+import org.docksidestage.javatry.basic.st6.dbms.St6PostgreSql;
+import org.docksidestage.javatry.basic.st6.dbms.St6Sql;
+import org.docksidestage.javatry.basic.st6.os.MacOperatingSystem;
+import org.docksidestage.javatry.basic.st6.os.St6OperationSystem;
 import org.docksidestage.unit.PlainTestCase;
 
 /**
@@ -410,7 +412,14 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
         // write your memo here:
         // _/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
         // what is difference?
-        //
+        // 概念的には「抽象的なモノ」であるか、「振る舞い」であるかが違いかなと思っています。
+        // つまり抽象的なモノをを継承するということは、"is-a"の関係だと思っていて、だからabstract classから一度に一つしか継承できないと思っています。
+        // この場合、設計の粒度にも関わってきますが、「車」と「電車」というabstract classがあって、is a car and is a trainっていうのはおかしい。
+        // あと「何が」の情報を持っている。「車」でいうと部品だったり、人でいうと「年齢」だったり...
+        // （抽象）クラスに名詞が使われるのもこういう所から来ているのかなと思っています。
+        // 反対にインターフェースは共通振る舞いを定義するもの（モノって言っちゃってますが、日本語難しい）っていうのは、「何が」は関係なく「何を」を表すもの。
+        // つまり「動く生物」っていうものであれば、「呼吸」とか「走る」とかが振る舞いで、年齢がどうとか部品がどうとか関係ない概念を表している。
+        // だからインターフェースには動詞が使われることが多いのかなって思ってます（Serializable, Clonableなどなど）。
         // _/_/_/_/_/_/_/_/_/_/
     }
 
@@ -423,6 +432,12 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
      */
     public void test_objectOriented_polymorphism_makeConcrete() {
         // your confirmation code here
+        Animal dragon = new Dragon(true);
+        BarkedSound sound = dragon.bark();
+        String sea = sound.getBarkWord();
+        log(sea); // should be bobobobobo....
+        int land = dragon.getHitPoint();
+        log(land); // should be 296
     }
 
     /**
@@ -431,6 +446,12 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
      */
     public void test_objectOriented_polymorphism_makeInterface() {
         // your confirmation code here
+        Animal dragon = new Dragon(true);
+        log(dragon instanceof Flyable); // should be true
+        ((Flyable) dragon).fly();
+
+        Animal youngDragon = new Dragon(false);
+        ((Flyable) youngDragon).fly();
     }
 
     // ===================================================================================
@@ -442,6 +463,10 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
      */
     public void test_objectOriented_writing_generalization_extractToAbstract() {
         // your confirmation code here
+        St6Sql mySql = new St6MySql();
+        log(mySql.buildPagingQuery(10, 1)); // should be limit 0, 10
+        St6Sql postgreSql = new St6PostgreSql();
+        log(postgreSql.buildPagingQuery(10, 1)); // offset 0 limit 10
     }
 
     /**
@@ -450,6 +475,8 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
      */
     public void test_objectOriented_writing_specialization_extractToConcrete() {
         // your confirmation code here
+        St6OperationSystem os = new MacOperatingSystem("shiny");
+        log(os.buildUserResourcePath("sea")); // should be /Users/shiny/sea
     }
 
     // ===================================================================================

@@ -25,13 +25,14 @@ public class NightOnlyTicketUsagePolicy implements TicketUsagePolicy {
         // Ticketクラス側でtoString()をオーバーライドすると良いです。
         // Ticketクラスの方で参考実装を載せておきますね。
         //
-        // TODO shiny ということで、ロスロスパターンを避けましょう by jflute (2024/12/04)
+        // TODO done shiny ということで、ロスロスパターンを避けましょう by jflute (2024/12/04)
         if (!ticket.hasRemainingDays()) {
-            throw new TicketUsageLimitExceededException("Ticket is unavailable. Remaining days are exhausted.");
+            throw new TicketUsageLimitExceededException("Ticket is unavailable. Remaining days are exhausted. Ticket: " + ticket);
         }
 
         if (!isNightTime()) {
-            throw new TicketInvalidTimeException("This ticket is only valid for use at night.");
+            String errorMessage = String.format("This ticket is only valid for use at night (between 18:00 - 23:00). Ticket: %s, Current time: %s", ticket, LocalTime.now());
+            throw new TicketInvalidTimeException(errorMessage);
         }
     }
 
