@@ -18,7 +18,12 @@ package org.docksidestage.javatry.basic;
 import org.docksidestage.bizfw.basic.buyticket.Ticket;
 import org.docksidestage.bizfw.basic.buyticket.TicketBooth;
 import org.docksidestage.bizfw.basic.buyticket.TicketType;
-import org.docksidestage.bizfw.basic.objanimal.*;
+import org.docksidestage.bizfw.basic.objanimal.Animal;
+import org.docksidestage.bizfw.basic.objanimal.BarkedSound;
+import org.docksidestage.bizfw.basic.objanimal.Cat;
+import org.docksidestage.bizfw.basic.objanimal.Dog;
+import org.docksidestage.bizfw.basic.objanimal.Dragon;
+import org.docksidestage.bizfw.basic.objanimal.Zombie;
 import org.docksidestage.bizfw.basic.objanimal.flyable.Flyable;
 import org.docksidestage.bizfw.basic.objanimal.loud.AlarmClock;
 import org.docksidestage.bizfw.basic.objanimal.loud.Loudable;
@@ -49,6 +54,7 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
      * Fix several mistakes (except simulation) in buying one-day passport and in-park process. <br>
      * (OneDayPassportを買って InPark する処理の中で、(simulationを除いて)間違いがいくつかあるので修正しましょう)
      */
+    @SuppressWarnings("unused") // Dead codeの部分をあえて残すために
     public void test_objectOriented_aboutObject_againstObject() {
         //
         // [ticket booth info]
@@ -73,12 +79,15 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
         --quantity;
         // step05同様、salesProceeds(売上)は、チケットの値段に依存するべきである
         // そしてNullpointerExceptionを避けるためIfで分岐する（が、salesProceedsの初期値を0、またはPrimitive型にする方がいいと思う）
+        // done shiny Dead codeになってるのは、salesProceedsが単なるローカル変数だから by jflute (2024/12/25)
+        // まあ、業務想定で考えたらチェックするのは当然のことなので、これはこれでOK
         if (salesProceeds == null) {
             salesProceeds = oneDayPrice;
         } else {
             salesProceeds += oneDayPrice;
         }
 
+        // TODO shiny まだある by jflute (2024/12/25)
         //
         // [ticket info]
         //
@@ -104,11 +113,13 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
         // [final process]
         //
         // 一般的に引数多いメソッドは避けるべきだと思う。プログラミングエラーを起こしやすい。関連するものたちはObjectなどで管理するべき。
+        // [1on1でのフォロー] オブジェクトとは？の話、そして、開発者としては間違えないように集中力を高めるの大事話
         saveBuyingHistory(quantity, displayPrice, salesProceeds, alreadyIn);
     }
 
     private void saveBuyingHistory(int quantity, Integer salesProceeds, int displayPrice, boolean alreadyIn) {
         if (alreadyIn) {
+            // TODO shiny まだある by jflute (2024/12/25)
             // simulation: only logging here (normally e.g. DB insert)
             showTicketBooth(displayPrice, salesProceeds);
             showYourTicket(quantity, alreadyIn);
@@ -421,8 +432,10 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
         // つまり「動く生物」っていうものであれば、「呼吸」とか「走る」とかが振る舞いで、年齢がどうとか部品がどうとか関係ない概念を表している。
         // だからインターフェースには動詞が使われることが多いのかなって思ってます（Serializable, Clonableなどなど）。
         // _/_/_/_/_/_/_/_/_/_/
+        // [1on1でのふぉろー] Javaの多重継承なくてinterfaceとハイブリッドなお話。
     }
 
+    // TODO jflute 次回ここから (2024/12/25)
     // ===================================================================================
     //                                                                 Polymorphism Making
     //                                                                 ===================
