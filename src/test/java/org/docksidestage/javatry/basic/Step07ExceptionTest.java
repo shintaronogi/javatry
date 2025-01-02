@@ -15,6 +15,9 @@
  */
 package org.docksidestage.javatry.basic;
 
+import java.io.File;
+import java.io.IOException;
+
 import org.docksidestage.bizfw.basic.supercar.SupercarClient;
 import org.docksidestage.javatry.basic.st7.St7BasicExceptionThrower;
 import org.docksidestage.javatry.basic.st7.St7ConstructorChallengeException;
@@ -25,7 +28,7 @@ import org.docksidestage.unit.PlainTestCase;
  * Operate as javadoc. If it's question style, write your answer before test execution. <br>
  * (javadocの通りに実施。質問形式の場合はテストを実行する前に考えて答えを書いてみましょう)
  * @author jflute
- * @author your_name_here
+ * @author shiny
  */
 public class Step07ExceptionTest extends PlainTestCase {
 
@@ -47,7 +50,13 @@ public class Step07ExceptionTest extends PlainTestCase {
         } finally {
             sea.append("broadway");
         }
-        log(sea); // your answer? =>
+        log(sea); // your answer? => hangarbroadway
+        // 背景： さーっと読んでみると、ExceptionがThrowされてStringがAppendされるコードに見える。
+        // Exceptionの中身をみてみると、land()でDebug Messageがいくつかと、IllegalStateExceptionがThrowされている。
+        // つまり、thrower.land()でIllegalStateExceptionがThrowされるので、catch節に入り、"hangar"と"broadway"がAppendされる
+        // docksideはExceptionがThrowされた後のコードなので呼ばれない。
+        //
+        // 答え：正解でした。
     }
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
@@ -60,7 +69,12 @@ public class Step07ExceptionTest extends PlainTestCase {
         } catch (IllegalStateException e) {
             sea = e.getMessage();
         }
-        log(sea); // your answer? =>
+        log(sea); // your answer? => oneman at showbase
+        // 背景：やっていることは、前のエクササイズと似ている。
+        // ExceptionをThrowして、Catchに入り、今回はMessageをGetしてSeaにAssignしている。
+        // getMessage()はStringでExceptionをThrowした時のMessageをそのまま取ってくるので、oneman at showbaseになる。
+        //
+        // 答え：正解でした。
     }
 
     /**
@@ -75,7 +89,10 @@ public class Step07ExceptionTest extends PlainTestCase {
         } catch (IllegalStateException e) {
             log(e);
         }
-        // your answer? => 
+        // your answer? => St7BasicExceptionThrowserのoneman()メソッド、40行目。
+        // 背景：エラーのスタックトレースをみていくと、下からどこで発生したかが見える。
+        // どこで起きた→それはどのメソッドでどのクラスの→...etc.
+        // 一番上をみてみると、実際にエラーがでた場所がわかる。
     }
 
     // ===================================================================================
@@ -88,35 +105,52 @@ public class Step07ExceptionTest extends PlainTestCase {
     public void test_exception_hierarchy_Runtime_instanceof_RuntimeException() {
         Object exp = new IllegalStateException("mystic");
         boolean sea = exp instanceof RuntimeException;
-        log(sea); // your answer? => 
+        log(sea); // your answer? => true
+        // 背景：以前のエクササイズ（５だったかな）で独自のExceptionを定義した時にJavaのExceptionについて少し調べた。
+        // 親クラスはThrowable（名前的に一瞬インターフェースかと思った）で内部実装をみると、Constructorや上にあるgetMessage()..などなどがある。
+        // Throwableのサブクラスには、Error系とException系があり、Errorは通常プログラムで処理できない（続行できない）ようなエラー。StackOverflowとか。テストでAssertionErrorとかもみたりする。
+        // 逆にExceptionはプログラム実行中に通常回復可能な状態を示すものという理解をしている。サブカテゴリとして、コンパイル時に明示的に処理・スローする必要があるChecked Exception（IOとかSQL）とUnchecked Exceptionがあるみたい。
+        // Runtime ExceptionはUnchecked Exceptionと基底にあって、多くのサブクラスを有している（Nullpointer、Arithmetic、IllegalArgument、IllegalState、などなど）。
+        // このエクササイズではIllegalStateを使っていて、これはRuntimeExceptionの一種なのでseaはTrueになる。
+        //
+        // 答え：正解でした。
     }
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
     public void test_exception_hierarchy_Runtime_instanceof_Exception() {
         Object exp = new IllegalStateException("mystic");
         boolean sea = exp instanceof Exception;
-        log(sea); // your answer? => 
+        log(sea); // your answer? => true
+        // 上にほとんど説明を書いてしまった...笑
+        //
+        // 答え：正解でした。
     }
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
     public void test_exception_hierarchy_Runtime_instanceof_Error() {
         Object exp = new IllegalStateException("mystic");
         boolean sea = exp instanceof Error;
-        log(sea); // your answer? => 
+        log(sea); // your answer? => false
+        //
+        // 答え：正解でした。
     }
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
     public void test_exception_hierarchy_Runtime_instanceof_Throwable() {
         Object exp = new IllegalStateException("mystic");
         boolean sea = exp instanceof Throwable;
-        log(sea); // your answer? => 
+        log(sea); // your answer? => true
+        //
+        // 答え：正解でした。
     }
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
     public void test_exception_hierarchy_Throwable_instanceof_Exception() {
         Object exp = new Throwable("mystic");
         boolean sea = exp instanceof Exception;
-        log(sea); // your answer? => 
+        log(sea); // your answer? => false
+        //
+        // 答え：正解でした。
     }
 
     // ===================================================================================
@@ -135,7 +169,11 @@ public class Step07ExceptionTest extends PlainTestCase {
         } catch (NullPointerException e) {
             log(e);
         }
-        // your answer? => 
+        // your answer? => 変数：land, 行番号：164
+        // 背景：変数seaがmysticとしてIntitializeされてい流ので、LandがNullなる。
+        // そのLandでtoLowercase()を呼ぼうとするとNullpointerExceptionがThrowされる。
+        //
+        // 答え：正解でした。
     }
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
@@ -149,7 +187,10 @@ public class Step07ExceptionTest extends PlainTestCase {
         } catch (NullPointerException e) {
             log(e);
         }
-        // your answer? => 
+        // your answer? => 変数：piari, 行番号：182
+        // !!! → !なので、piariがnullになる。
+        //
+        // 答え：正解でした。
     }
 
     /**
@@ -161,7 +202,10 @@ public class Step07ExceptionTest extends PlainTestCase {
             String sea = "mystic";
             String land = !!!sea.equals("mystic") ? null : "oneman";
             String piari = !!!sea.equals("mystic") ? "plaza" : null;
-            int sum = land.length() + piari.length();
+            // int sum = land.length() + piari.length();
+            int landLength = land.length();
+            int piariLength = piari.length();
+            int sum = landLength + piariLength;
             log(sum);
         } catch (NullPointerException e) {
             log(e);
@@ -176,6 +220,13 @@ public class Step07ExceptionTest extends PlainTestCase {
      * (new java.io.File(".") の canonical path を取得してログに表示、I/Oエラーの時はメッセージとスタックトレースを代わりに表示)
      */
     public void test_exception_checkedException_basic() {
+        try {
+            File file = new File(".");
+            String canonicalPath = file.getCanonicalPath();
+            log(canonicalPath);
+        } catch (IOException e) {
+            log(e);
+        }
     }
 
     // ===================================================================================
@@ -196,14 +247,26 @@ public class Step07ExceptionTest extends PlainTestCase {
             Throwable cause = e.getCause();
             sea = cause.getMessage();
             land = cause.getClass().getSimpleName();
-            log(sea); // your answer? => 
-            log(land); // your answer? => 
-            log(e); // your answer? => 
+            log(sea); // your answer? => Failed to call the third help method: symbol=-1
+            // 背景：下のPrivateメソッドにちょくちょくメモを書いているが、throwCauseThirdLevel()が呼ばれて、Integer.valueOf()でエラーが出るので、NumberformatExceptionがThrowされる。
+            // それが、throwCauseSecondLevelでCatchされ、IllegalArgumentExceptionがThrowされる。
+            // さらに、それがthrowCauseFirstLevelがCatchされ、IllegalStateExceptionが呼ばれる。
+            // 「ここ」では、それがCatchされ、CauseをGetする。CatchしたIllegalStateExceptionのCauseはIllegalArgumentExceptionなので、causeSecondLevelで呼ばれたExceptionのメッセージがGetされ、それがSeaになる。
+            log(land); // your answer? => IllegalArgumentException
+            // 背景：上にも書いてあるが、causeはIllegalArgumentExceptionなので、そのGetClas(), getSimpleName()はIllegalArgumentExcpetionになる。
+            log("e", e); // your answer? => Caused by: NumberFormatException...: For input string: "piari"
+            // エラーのスタックトレースは、名前の通り「Stack」なので、発生した場所から順に積み上げられていく(LIFO)。
+            // キャッチされスローされると積み上がっていくので、一番上には一番最近キャッチ・スローされたエラーで、一番下には最初のものが表示される。
+            // (「最後」っていう言葉が、上か下かよくわからないので一文脈的に番下として認識して書いてます)
         }
     }
 
     private void throwCauseFirstLevel() {
         int symbol = Integer.MAX_VALUE - 0x7ffffffe;
+        // NOTE:
+        // IntegerのMax Valueは32Bitなので2^31 - 1 = 2,147,483,647
+        // 0x(１６進数)の7ffffffeは2,147,483,646
+        // なのでSymbox = 1
         try {
             throwCauseSecondLevel(symbol);
         } catch (IllegalArgumentException e) {
@@ -215,6 +278,7 @@ public class Step07ExceptionTest extends PlainTestCase {
         try {
             --symbol;
             symbol--;
+            // symbox = -1
             if (symbol < 0) {
                 throwCauseThirdLevel(symbol);
             }
@@ -245,6 +309,18 @@ public class Step07ExceptionTest extends PlainTestCase {
             // _/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
             // What happens? Write situation and cause here. (何が起きた？状況と原因をここに書いてみましょう)
             // - - - - - - - - - -
+            // 昔々、あるところにとても金持ちの人がいました。
+            // その金持ちの人は、とても高い車を集めるのが好きなので、「SupercarClient」（スーパーカーのクライアント）と呼ばれています。
+            // SupercarClientはスーパーカーのコレクションを持っていて、新たなスーパーカーを買うことができます。
+            // でもスーパーカーを買うまでには、色々な複雑なプロセスが含まれているます。
+            // SupercarClientは、スーパーカーを販売業者に注文し、そこから製造業者、さらに下請けと進んでいきます。これが社会の構造です。
+            // 今回、クライアントはSeaみたいなハンドルのスーパーカーが欲しいと販売業者に言いました。
+            // 販売業者はその情報を元にカタログを探し、大元の製造業者に伝えました。
+            // 大元の製造業者は、そのカタログを元に必要なハンドルを探し、そのハンドルを作るように下請けのハンドル製造業者に伝えました。
+            // それを製造するには、さらに必要なネジが必要だったので、さらに下請けの製造業者にスペックを伝え製造を頼みました。
+            // ここで、一つの問題がおきました！このネジのスペックが可愛すぎたのです！このネジ製造会社の社長は可愛いものに飽きていて、もうこのネジは作らねえんだよ！と言いました。
+            // ということで、残念ながらこのスペックのスーパーカーは作れないようです。
+            // めでたし、めでたし。
             //
             //
             //

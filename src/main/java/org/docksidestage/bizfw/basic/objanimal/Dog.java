@@ -17,10 +17,11 @@ package org.docksidestage.bizfw.basic.objanimal;
 
 import org.docksidestage.bizfw.basic.objanimal.runner.FastRunner;
 
-// TODO shiny authorおねがいします〜 by jflute (2024/12/25)
+// TODO done shiny authorおねがいします〜 by jflute (2024/12/25)
 /**
  * The object for dog(犬).
  * @author jflute
+ * @author shiny
  */
 public class Dog extends Animal implements FastRunner {
 
@@ -37,7 +38,10 @@ public class Dog extends Animal implements FastRunner {
         return "wan"; // bow? in English
     }
 
-    // TODO shiny せっかくなのでタグコメントも入れて、Runカテゴリであると区切ってみてください by jflute (2024/12/25)
+    // TODO done shiny せっかくなのでタグコメントも入れて、Runカテゴリであると区切ってみてください by jflute (2024/12/25)
+    // ===================================================================================
+    //                                                                               Run
+    //                                                                              ======
     @Override
     public void run() {
         downHitPoint();
