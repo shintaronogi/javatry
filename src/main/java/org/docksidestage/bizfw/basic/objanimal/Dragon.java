@@ -1,5 +1,7 @@
 package org.docksidestage.bizfw.basic.objanimal;
 
+import org.docksidestage.bizfw.basic.objanimal.barking.BarkingProcess;
+import org.docksidestage.bizfw.basic.objanimal.barking.DragonBarkingProcess;
 import org.docksidestage.bizfw.basic.objanimal.flyable.Flyable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +20,7 @@ public class Dragon extends Animal implements Flyable {
         // ===================================================================================
         //                                                                           Attribute
         //                                                                           =========
-         private boolean isGrown; // when it's grown, it can breathe fire and fly
+        private boolean isGrown; // when it's grown, it can breathe fire and fly
 
         // ===================================================================================
         //                                                                         Constructor
@@ -37,19 +39,16 @@ public class Dragon extends Animal implements Flyable {
         //                                                                               Bark
         //                                                                              ======
         @Override
+        protected BarkingProcess createBarkingProcess() {
+            return new DragonBarkingProcess(this, () -> downHitPoint());
+        }
+
+        @Override
         protected String getBarkWord() {
             return "gogogogogo";
         }
 
-        @Override
-        protected BarkedSound doBark(String barkWord) {
-            if (isGrown) {
-                breatheFire();
-            }
-            return super.doBark(barkWord);
-        }
-
-        private void breatheFire() {
+        public void breatheFire() {
             logger.debug("bobobobobobobobo (Breathing fire)");
             downHitPoint();
         }

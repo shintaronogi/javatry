@@ -19,7 +19,7 @@ import org.docksidestage.bizfw.basic.buyticket.Ticket;
 import org.docksidestage.bizfw.basic.buyticket.TicketBooth;
 import org.docksidestage.bizfw.basic.buyticket.TicketType;
 import org.docksidestage.bizfw.basic.objanimal.Animal;
-import org.docksidestage.bizfw.basic.objanimal.BarkedSound;
+import org.docksidestage.bizfw.basic.objanimal.barking.BarkedSound;
 import org.docksidestage.bizfw.basic.objanimal.Cat;
 import org.docksidestage.bizfw.basic.objanimal.Dog;
 import org.docksidestage.bizfw.basic.objanimal.Dragon;
@@ -87,12 +87,13 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
             salesProceeds += oneDayPrice;
         }
 
-        // TODO shiny まだある by jflute (2024/12/25)
+        // TODO done shiny まだある by jflute (2024/12/25)
         //
         // [ticket info]
         //
         // simulation: actually these variables should be more wide scope
-        int displayPrice = quantity;
+        // よくみたらdisplayPriceにquantityを代入してる！？
+        int displayPrice = oneDayPrice;
         boolean alreadyIn = false;
 
         // other processes here...
@@ -119,10 +120,12 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
 
     private void saveBuyingHistory(int quantity, Integer salesProceeds, int displayPrice, boolean alreadyIn) {
         if (alreadyIn) {
-            // TODO shiny まだある by jflute (2024/12/25)
+            // TODO done shiny まだある by jflute (2024/12/25)
             // simulation: only logging here (normally e.g. DB insert)
-            showTicketBooth(displayPrice, salesProceeds);
-            showYourTicket(quantity, alreadyIn);
+
+            // 引数がバラバラでした。これで終わりだと信じたい！
+            showTicketBooth(quantity, salesProceeds);
+            showYourTicket(displayPrice, alreadyIn);
         }
     }
 
@@ -502,6 +505,10 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
      */
     public void test_objectOriented_writing_withDelegation() {
         // your confirmation code here
+        boolean isDragonGrown = true;
+        Animal dragon = new Dragon(isDragonGrown);
+        dragon.bark();
+        log(dragon.getHitPoint()); // should be 296
     }
 
     /**
