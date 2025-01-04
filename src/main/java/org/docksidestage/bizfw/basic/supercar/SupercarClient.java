@@ -19,6 +19,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.docksidestage.bizfw.basic.supercar.SupercarManufacturer.Supercar;
+import org.docksidestage.bizfw.basic.supercar.exception.SupercarClientException;
+import org.docksidestage.bizfw.basic.supercar.exception.SupercarDealerException;
 
 /**
  * The client(顧客) of supercar.
@@ -31,8 +33,12 @@ public class SupercarClient {
     public void buySupercar() {
         SupercarDealer dealer = createDealer();
         String clientRequirement = prepareClientRequirement();
-        Supercar orderedCustomCar = dealer.orderSupercar(clientRequirement);
-        orderedCustomCarCollection.add(orderedCustomCar);
+        try {
+            Supercar orderedCustomCar = dealer.orderSupercar(clientRequirement);
+            orderedCustomCarCollection.add(orderedCustomCar);
+        } catch (SupercarDealerException e) {
+            throw new SupercarClientException("Failed to buy super car with client requirements: " + prepareClientRequirement(), e);
+        }
     }
 
     private String prepareClientRequirement() {

@@ -335,6 +335,7 @@ public class Step07ExceptionTest extends PlainTestCase {
      */
     public void test_exception_translation_improveChallenge() {
         try {
+            // それぞれのクラスのネストで専用のException ClassとTry, Catch, Rethrow(cause)することでスタックトレースのエラー情報から状況が把握できるようにした。
             new SupercarClient().buySupercar(); // you can fix the classes
             fail("always exception but none");
         } catch (RuntimeException e) {
@@ -361,7 +362,8 @@ public class Step07ExceptionTest extends PlainTestCase {
         try {
             helpThrowIllegalState();
         } catch (IllegalStateException e) {
-            throw new St7ConstructorChallengeException("Failed to do something.");
+            // Caused byが失われて何が理由でExceptionが出たのかわからなくてなっていたので、Exception側に新たなConstructorを追加し、Causeと一緒にThrowするように変更した。
+            throw new St7ConstructorChallengeException("Failed to do something.", e);
         }
     }
 
@@ -383,7 +385,12 @@ public class Step07ExceptionTest extends PlainTestCase {
         // _/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
         // Write here. (ここに書いてみましょう)
         // - - - - - - - - - -
-        //
+        // もう既に↑に書いてしまっているけど、ExceptionとErrorのコンセプトの違いは..
+        // 1. アプリケーションレベルかシステムレベルで発生するか
+        // 2. 回復可能か不可能か
+        // の違いだと思っています！つまり一言でいうと「どれだけ深刻か？」かなと。
+        // アプリケーションレベル（ロジックとかで出る）のものは、開発者がCatchなどで処理することで正常な動作を維持できるもの（回復可能）
+        // システムレベルで出るものは、深刻な問題で通常の場合、処理を続行できないものかなと。
         //
         //
         // _/_/_/_/_/_/_/_/_/_/
