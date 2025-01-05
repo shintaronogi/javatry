@@ -6,6 +6,7 @@ import org.docksidestage.bizfw.basic.objanimal.flyable.Flyable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+// TODO shiny classの中、なんかインデントがひとつ多いような？ by jflute (2025/01/05)
 /**
  * The object for dragon(ドラゴン).
  * @author shiny

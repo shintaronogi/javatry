@@ -19,11 +19,11 @@ import org.docksidestage.bizfw.basic.buyticket.Ticket;
 import org.docksidestage.bizfw.basic.buyticket.TicketBooth;
 import org.docksidestage.bizfw.basic.buyticket.TicketType;
 import org.docksidestage.bizfw.basic.objanimal.Animal;
-import org.docksidestage.bizfw.basic.objanimal.barking.BarkedSound;
 import org.docksidestage.bizfw.basic.objanimal.Cat;
 import org.docksidestage.bizfw.basic.objanimal.Dog;
 import org.docksidestage.bizfw.basic.objanimal.Dragon;
 import org.docksidestage.bizfw.basic.objanimal.Zombie;
+import org.docksidestage.bizfw.basic.objanimal.barking.BarkedSound;
 import org.docksidestage.bizfw.basic.objanimal.flyable.Flyable;
 import org.docksidestage.bizfw.basic.objanimal.loud.AlarmClock;
 import org.docksidestage.bizfw.basic.objanimal.loud.Loudable;
@@ -87,7 +87,7 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
             salesProceeds += oneDayPrice;
         }
 
-        // TODO done shiny まだある by jflute (2024/12/25)
+        // done shiny まだある by jflute (2024/12/25)
         //
         // [ticket info]
         //
@@ -120,7 +120,7 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
 
     private void saveBuyingHistory(int quantity, Integer salesProceeds, int displayPrice, boolean alreadyIn) {
         if (alreadyIn) {
-            // TODO done shiny まだある by jflute (2024/12/25)
+            // done shiny まだある by jflute (2024/12/25)
             // simulation: only logging here (normally e.g. DB insert)
 
             // 引数がバラバラでした。これで終わりだと信じたい！

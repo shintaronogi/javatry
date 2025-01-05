@@ -17,7 +17,7 @@ package org.docksidestage.bizfw.basic.objanimal;
 
 import org.docksidestage.bizfw.basic.objanimal.runner.FastRunner;
 
-// TODO done shiny authorおねがいします〜 by jflute (2024/12/25)
+// done shiny authorおねがいします〜 by jflute (2024/12/25)
 /**
  * The object for dog(犬).
  * @author jflute
@@ -38,7 +38,7 @@ public class Dog extends Animal implements FastRunner {
         return "wan"; // bow? in English
     }
 
-    // TODO done shiny せっかくなのでタグコメントも入れて、Runカテゴリであると区切ってみてください by jflute (2024/12/25)
+    // done shiny せっかくなのでタグコメントも入れて、Runカテゴリであると区切ってみてください by jflute (2024/12/25)
     // ===================================================================================
     //                                                                               Run
     //                                                                              ======
