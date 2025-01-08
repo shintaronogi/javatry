@@ -32,8 +32,8 @@ public abstract class St6OperationSystem {
     //                                                                           =========
     private final String osType;
     private final String loginId;
-    // TODO done jflute 親クラスで定義されたAttributeに子クラスからアクセスする方法はでprotectedを使うのってどうなんだろうという疑問。(あまりみたことない)
-    // TODO shiny [へんじ] 親クラスと子クラスの独立性/依存性に寄るかなと by jflute (2025/01/05)
+    // done jflute 親クラスで定義されたAttributeに子クラスからアクセスする方法はでprotectedを使うのってどうなんだろうという疑問。(あまりみたことない)
+    // done shiny [へんじ] 親クラスと子クラスの独立性/依存性に寄るかなと by jflute (2025/01/05)
     //
     // 例えば、親クラスがライブラリに入ってて、子クラスは現場で作るとかであれば、
     // 独立性は高く依存性は薄い方が良いので、親のAttributeをあまり見せないほうが良いかなと。
@@ -48,6 +48,9 @@ public abstract class St6OperationSystem {
     // 「privateで定義されててprotectedのgetterがなくてサブクラスが拡張できないで困る」
     // ってこともよくあるので、自分はそれだったらprotectedで公開しちゃう。
     // とはいえ、それも「内部構造をどれだけ守りたいか？」次第でケースバイケースだね。
+    //
+    // [1on1でのふぉろー] そのクラスがどう提供されるか？ライブラリの規模は？運用で大事にしているものは？
+    // そのへんに寄ってセオリーは変わってきます。
 
     // ===================================================================================
     //                                                                         Constructor
