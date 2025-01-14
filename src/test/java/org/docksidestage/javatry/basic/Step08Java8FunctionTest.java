@@ -33,7 +33,7 @@ import org.docksidestage.unit.PlainTestCase;
  * Operate as javadoc. If it's question style, write your answer before test execution. <br>
  * (javadocの通りに実施。質問形式の場合はテストを実行する前に考えて答えを書いてみましょう)
  * @author jflute
- * @author your_name_here
+ * @author shiny
  */
 public class Step08Java8FunctionTest extends PlainTestCase {
 
@@ -68,7 +68,23 @@ public class Step08Java8FunctionTest extends PlainTestCase {
         log("...Executing lambda expression style callback");
         helpCallbackConsumer(stage -> log(stage + ": " + title));
 
-        // your answer? => 
+        // your answer? => ログ出力される文字列はすべて同じ
+        // 背景：(1から４の順番でみていく)
+        // 前提：まず、Consumerというインターフェース<T型>があり、それにはaccept(T t)というメソッドが存在している
+        // Callback関数では、最初にbroadway, 最後にhangarがログに出される。
+        // 1. St8BasicConsumerクラスはConsumerを実装している。このクラスにはtitleというフィールドがあり、Constructorで初期化される。この例では、overで初期化されている。
+        // acceptメソッドはOverrideされていて、引数stageでstage : titleがログに出されるようになっている。
+        // したがって、Callback関数ないで呼ばれるaccept()はdockside : overとなる
+        // 2. 匿名クラスを使ってConsumerのインターフェースをインスタンス化し、acceptメソッドをクラス内で定義している。
+        // なので実質上とやっていることは全く一緒なので、accept()はdockside : overになる
+        // 3. Step7のエクササイズでもちょっと触れたが...Consumerは関数型インターフェースである（一つの抽象メソッドしか持たない）
+        // そして、Lambda式はそのインターフェースを手軽に実装できる構文として使える。
+        // 渡しているLambda式は...引数stageでlog(stage + ": " + title)するというもの。
+        // つまり上の二つでoverrideしたaccept()メソッドと同じものをLambda式として渡している。
+        // したがって、出力するLogも同じになる。
+        // 4. Lambda式を{}で囲むと複数のステートメントを書くことができるが、単一だと省略できる！
+        //
+        // 答え：正解でした。
 
         // cannot reassign because it is used at callback process
         //title = "wave";
@@ -84,7 +100,9 @@ public class Step08Java8FunctionTest extends PlainTestCase {
             log(stage);
         });
         log("lost river");
-        // your answer? => 
+        // your answer? => harbor, broadway, dockside, hangar, lost river
+        //
+        // 答え：正解でした。
     }
 
     private class St8BasicConsumer implements Consumer<String> {
@@ -116,7 +134,7 @@ public class Step08Java8FunctionTest extends PlainTestCase {
         String sea = helpCallbackFunction(number -> {
             return label + ": " + number;
         });
-        log(sea); // your answer? => 
+        log(sea); // your answer? => number: 7
     }
 
     private String helpCallbackFunction(Function<Integer, String> oneArgLambda) {
@@ -141,17 +159,15 @@ public class Step08Java8FunctionTest extends PlainTestCase {
      * </pre>
      */
     public void test_java8_lambda_convertStyle_basic() {
-        helpCallbackSupplier(new Supplier<String>() { // sea
-            public String get() {
-                return "broadway";
-            }
-        });
+        helpCallbackSupplier(() -> {
+            return "broadway";
+        }); // sea);
 
-        helpCallbackSupplier(() -> { // land
-            return "dockside";
-        });
+        helpCallbackSupplier(() -> "dockside"); // land
 
-        helpCallbackSupplier(() -> "hangar"); // piari
+        helpCallbackSupplier(() -> {
+            return "hangar";
+        }); // piari
     }
 
     private void helpCallbackSupplier(Supplier<String> oneArgLambda) {
@@ -176,7 +192,16 @@ public class Step08Java8FunctionTest extends PlainTestCase {
             St8Member member = optMember.get();
             log(member.getMemberId(), member.getMemberName());
         }
-        // your answer? => 
+        // your answer? => 同じ
+        // 背景：まず、St8Memberというクラスがあり、St8DbFacadeはそのクラスのインスタンスを生成するFactoryクラスの役割を果たしている。
+        // St8DbFacadeのoldselectMember()メソッドは、受け取った引数memberId(Integer)に対してSt8Memberのインスタンスを生成する。
+        // この時、memberIdが1-3の場合は、特定のインスタンスを生成し、それ以外の場合はnullを返す。
+        // 上記の例えの場合、渡されるMemberIdは1なので、nullにはならず、そのインスタンスのmemberIdとmemberNameがログ出しされる。
+        // selectMember()メソッドは、受け取った引数stageIdに対して、oldselectMember(stageId)を呼び出すが、唯一の違いは、Optional.ofnullable()でラップして、Optional型を返すこと。
+        // つまり、1-3以外の数を渡した場合、nullではなくて空のOptionalが返ってくる。
+        // だが、上記の例では、上と同じく1を渡しているため、T get()で受け取るインスタンスは同じであり、したがってLog出力される内容も一緒である。
+        //
+        // 答え：正解でした。
     }
 
     /**
@@ -192,7 +217,12 @@ public class Step08Java8FunctionTest extends PlainTestCase {
         optMember.ifPresent(member -> {
             log(member.getMemberId(), member.getMemberName());
         });
-        // your answer? => 
+        // your answer? => 同じ
+        // 背景：まず、呼び出しているメソッド（selectMember(1)）は上のエクササイズと一緒。
+        // なのでoptMemberは空ではなく、isPresent()はTrueとなる。したがって、log出力される内容は上記のエクササイズと一緒。
+        // 下のifPresentの定義は、public void ifPresent(java. util. function. Consumer<? super T> action )でDescriptionにはご親切に：If a value is present, performs the given action with the value, otherwise does nothing.って書いてくれてる（Intellijくん）。
+        // なのでOptionalのValueであるmember(インスタンス)で実行されるメソッド（getMemberId, getMemberName）は一緒であり、log出力される内容も一緒である。
+
     }
 
     /**
@@ -252,13 +282,26 @@ public class Step08Java8FunctionTest extends PlainTestCase {
                 .map(wdl -> wdl.getWithdrawalId()) // ID here
                 .orElse(defaultWithdrawalId);
 
-        log(sea); // your answer? => 
-        log(land); // your answer? => 
-        log(piari); // your answer? => 
-        log(bonvo); // your answer? => 
-        log(dstore); // your answer? => 
-        log(amba); // your answer? => 
-        log(miraco); // your answer? => 
+        log(sea); // your answer? => music
+        log(land); // your answer? => music
+        log(piari); // your answer? => music
+        log(bonvo); // your answer? => music
+        log(dstore); // your answer? => *no reason: someone was not present
+        log(amba); // your answer? => *no reason: someone was not present
+        log(miraco); // your answer? => 12
+        //
+        // 背景：まず最初のseaですが...
+        // 呼び出しているoldselectMember()は上のエクササイズと一緒、つまりnullじゃないことはわかっている、
+        // さらに生成時のコンストラクタで、new St8Withdrawal(11, "music")が呼ばれているので、withDrawlもnullではなくて、String oldgetPrimaryReasonは引数で渡されているmusicを返す。
+        // したがってseaは、musicである。
+        // 次のland, piari, bonvoは上と実質同じことをやっている。selectMember()でstageId=1が渡されているので、生成されているインスタンスは上と一緒。
+        // そこからmapなどを使ってチェインさせているが、呼び出しているメソッド(oldGet, get)に応じてflatmapを使用している（NestされたOptionalにならない為に）。
+        // だが、やってることは一緒で、orElseではValueが存在するため、Otherが呼ばれずland, piari, bonvoの中身はmusicになる。
+        // dstoreの時は、stageId/memberId = 2では、new St8Withdrawal(12, null)が渡されているので、withdrawl自体はnullではないが、PrimarySeasonはnullなので、oldGetPrimaryReasonは空のOptionalになり、orElseでOtherの部分が呼ばれ、したがってdstoreの中身は、*no reason: someone was not presentになる。
+        // ambaの時は、stageId/memberId = 3なので、withdrawlはそもそもnullである。したがって、flatmapで返される値は全て空のOptionalであり、最終的のorElseでは上同様、*no reason: someone was not presentが呼ばれ、ambaの中身はそのStringになる。
+        // 最後のmiracoは、stageId/memberId = 2で初期化されており、new St8Withdrawal(12, null)が渡されているのでgetWithDrawalIdは12を返し、miaracoはその12になる。
+        //
+        // 答え：正解でした。
     }
 
     /**
@@ -277,7 +320,13 @@ public class Step08Java8FunctionTest extends PlainTestCase {
         } catch (IllegalStateException e) {
             sea = e.getMessage();
         }
-        log(sea); // your answer? => 
+        log(sea); // your answer? => wave
+        //
+        // 背景：まず、St8DbFacadeで上のエクササイズ群同様にstageId/memberId = 2でOptional型のSt8Memberが初期化されている。
+        // これはEmptyのOptional出ないことはわかっているので、次のmemberへのReassignはExceptionが呼ばれず成功する。
+        // その後try/catchブロックに入るが、withdrawlのprimary reasonがnullなのは分かっているため、map(..oldgetPrimaryReason())の部分が空のOptionalをw返し、
+        // したがってIllegalStateException("wave")がThrowされる。
+        // それがキャッチされ、getMessage()でwaveがseaにAssignされるため、seaはwaveになる。
     }
 
     // ===================================================================================
@@ -296,14 +345,26 @@ public class Step08Java8FunctionTest extends PlainTestCase {
             }
         }
         String sea = oldfilteredNameList.toString();
-        log(sea); // your answer? => 
+        log(sea); // your answer? => ["broadway", "dockside"]
+        // 背景：St8DbFacadeのselectMemberListAll()ではselectMember(）：1, 2, 3で初期化され、memberが持ってるList purchase listにpurchaseを複数追加している。
+        // つまり、この時点でmemberListはstageId/memberId: 1, 2, 3で初期されたインスタンスを三つ持っている状態。
+        // それをForループで回し、getWithDrawl()が空でない場合、oldfilteredNameListのメンバーの名前を追加している。
+        // 前回のエクササイズから、1と2はwithDrawlが空でなく、3が空であることは分かっているので、追加されるmemberの名前は、broway, dockside。そのリストをtoStringでString化してログ出ししている。
+        //
+        // 答え：正解でした。
 
         List<String> filteredNameList = memberList.stream() //
                 .filter(mb -> mb.getWithdrawal().isPresent()) //
                 .map(mb -> mb.getMemberName()) //
                 .collect(Collectors.toList());
         String land = filteredNameList.toString();
-        log(land); // your answer? => 
+        log(land); // your answer? => ["brodway", "dockside"]
+        // 背景：やっている事は上と同じで、実現を単純にSteramAPI経由でやっている。
+        // まず上記で初期化したmemberListをStream化して、そこからWithdrawalが空でないものだけをFilter、さらにgetMemberName()をMapすることで、memberNameでできたStreamに変化し、
+        // collect(Collectors.toList())でそれをString型のListにAccumulateしている。
+        // できたListをtoStringでString化して、Log出ししているので、答えは上と一緒になる。
+        //
+        // 答え：正解でした。
     }
 
     /**
@@ -319,7 +380,15 @@ public class Step08Java8FunctionTest extends PlainTestCase {
                 .mapToInt(pur -> pur.getPurchasePrice())
                 .distinct()
                 .sum();
-        log(sea); // your answer? => 
+        log(sea); // your answer? => 600
+        // 背景：まず途中まではやっていること一緒。memberListを初期化して、それをStream化する。
+        // そのStreamからwithDrawlが空じゃないものだけをFilterする。
+        // そこから各memberのPurchaseListをStream化して、Flatする（単一のStream化）。
+        // (Member2のPurchaseListは空なのでmember1のpurchase ListだけがStream化される)
+        // そ子からpurchaseIdが100以上のものだけをFilter（全て該当）
+        // そこからpurchasePriceをIntにmapする(100, 200, 200, 300)になる。
+        // distinct()で同じものを削除（200）し、100, 200, 300になる。
+        // sum()でそれらを足して、100 + 200 + 300 = 600で合計600になる。
     }
 
     // *Stream API will return at Step12 again, it's worth the wait!
