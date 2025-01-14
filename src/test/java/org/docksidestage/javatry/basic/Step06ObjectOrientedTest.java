@@ -437,7 +437,8 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
         // _/_/_/_/_/_/_/_/_/_/
         // [1on1でのふぉろー] Javaの多重継承なくてinterfaceとハイブリッドなお話。
     }
-    // TODO jflute 1on1にて、Javaでのinterfaceの使われ方、大きく二つのパターンについて話す (2024/12/25)
+    // done jflute 1on1にて、Javaでのinterfaceの使われ方、大きく二つのパターンについて話す (2024/12/25)
+    // HitPointAction にて話した。
 
     // TODO jflute 次回ここから (2024/12/25)
     // ===================================================================================
