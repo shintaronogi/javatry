@@ -20,6 +20,8 @@ package org.docksidestage.javatry.basic.st6.dbms;
  */
 public class St6MySql extends St6Sql {
 
+    // TODO shiny 流れも再利用したい (calcして文字列作って、の順番の2step) by jflute (2025/01/15)
+    // (calcと文字列生成の間に、別の処理が追加されるってなったとき、1箇所直せば済むようにしたい)
     @Override
     public String buildPagingQuery(int pageSize, int pageNumber) {
         int offset = calculateOffset(pageSize, pageNumber);

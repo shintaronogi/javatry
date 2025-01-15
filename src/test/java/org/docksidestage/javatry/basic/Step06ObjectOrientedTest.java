@@ -440,7 +440,7 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
     // done jflute 1on1にて、Javaでのinterfaceの使われ方、大きく二つのパターンについて話す (2024/12/25)
     // HitPointAction にて話した。
 
-    // TODO jflute 次回ここから (2024/12/25)
+    // done jflute 次回ここから (2024/12/25)
     // ===================================================================================
     //                                                                 Polymorphism Making
     //                                                                 ===================
@@ -493,6 +493,7 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
      */
     public void test_objectOriented_writing_specialization_extractToConcrete() {
         // your confirmation code here
+        // TODO shiny Windows のロジックが消え去ってしまっています by jflute (2025/01/15)
         St6OperationSystem os = new MacOperatingSystem("shiny");
         log(os.buildUserResourcePath("sea")); // should be /Users/shiny/sea
     }
@@ -546,6 +547,8 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
         // 一般的に動物にある特性（や場合によって振る舞い）というのはゾンビに対しては、適応しないものが多い気がしている。
         // このエクササイズの例でもHPという特性はそもそもゾンビに必要ではない。
         // これがもっと複雑な実装になれば、「ゾンビにこれはないので、こう書き変えて、これはいらなくて...」みたいなのが沢山出てくる予感。
+        // [1on1でのフォロー] バイオハザードの話、ゾンビは犬も猫もなり得る？とすると、動物はゾンビになり得る？
+        // とすると、属性(状態)として表現しても良いものかも？ (もちろんゾンビの定義次第: 業務要件次第)
         // _/_/_/_/_/_/_/_/_/_/
     }
 }

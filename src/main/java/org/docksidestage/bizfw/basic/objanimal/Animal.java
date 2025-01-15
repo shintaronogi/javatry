@@ -30,6 +30,9 @@ public abstract class Animal implements Loudable {
     // ===================================================================================
     //                                                                          Definition
     //                                                                          ==========
+    // TODO shiny unused by jflute (2025/01/15)
+    // [1on1でのフォロー] IntelliJ の idea ディレクトリについて。
+    // https://dbflute.seasar.org/ja/manual/topic/friends/intellij/index.html
     private static final Logger logger = LoggerFactory.getLogger(Animal.class);
 
     // ===================================================================================
@@ -58,6 +61,8 @@ public abstract class Animal implements Loudable {
     }
 
     protected BarkingProcess createBarkingProcess() {
+        // [1on1でのふぉろー] オブジェクト指向とコールバックのコラボレーション
+        // オブジェクト指向の線引きは？ (結局コールバックもポリモーフィズム)
         return new BarkingProcess(() -> downHitPoint());
     }
 
