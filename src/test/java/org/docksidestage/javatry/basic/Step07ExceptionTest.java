@@ -210,6 +210,7 @@ public class Step07ExceptionTest extends PlainTestCase {
         } catch (NullPointerException e) {
             log(e);
         }
+        // [1on1でのふぉろー] 最近のJavaだと、NullPointerExceptionのメッセージで変数を教えてくれる。
     }
 
     // ===================================================================================
@@ -227,6 +228,9 @@ public class Step07ExceptionTest extends PlainTestCase {
         } catch (IOException e) {
             log(e);
         }
+        // [1on1でのふぉろー] チェック例外があまり流行ってない話。
+        // でもちゃんと使えば便利なんだけど話も一応。
+        // 発展して、Javaの仕組み化の文化も影響してる話。
     }
 
     // ===================================================================================
@@ -293,7 +297,7 @@ public class Step07ExceptionTest extends PlainTestCase {
         }
     }
 
-    // TODO jflute 1on1ここから (2025/01/15)
+    // done jflute 1on1ここから (2025/01/15)
     // ===================================================================================
     //                                                                         Translation
     //                                                                         ===========
@@ -335,6 +339,8 @@ public class Step07ExceptionTest extends PlainTestCase {
      * できるだけ例外情報だけでその状況が理解できるように、Supercarのクラスたちの例外ハンドリングを改善しましょう。
      */
     public void test_exception_translation_improveChallenge() {
+        // [1on1でのふぉろー] 例外の翻訳のお話。一つの中断イベントに付き、複数のメッセージがあるもの (複数の目撃証言)
+        // フレームワークでの例外翻訳のお話も。(LastaFluteやDBFluteでの高度な例外メッセージ)
         try {
             // それぞれのクラスのネストで専用のException ClassとTry, Catch, Rethrow(cause)することでスタックトレースのエラー情報から状況が把握できるようにした。
             new SupercarClient().buySupercar(); // you can fix the classes
@@ -344,6 +350,7 @@ public class Step07ExceptionTest extends PlainTestCase {
         }
     }
 
+    // TODO jflute 次回1on1ここから (2025/01/22)
     // ===================================================================================
     //                                                                           Challenge
     //                                                                           =========
