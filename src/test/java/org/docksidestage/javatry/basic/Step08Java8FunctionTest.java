@@ -163,7 +163,9 @@ public class Step08Java8FunctionTest extends PlainTestCase {
             return "broadway";
         }); // sea);
 
-        helpCallbackSupplier(() -> "dockside"); // land
+        helpCallbackSupplier(() -> {
+            return "dockside";
+        }); // land
 
         helpCallbackSupplier(() -> {
             return "hangar";
@@ -187,6 +189,7 @@ public class Step08Java8FunctionTest extends PlainTestCase {
         if (oldmember != null) {
             log(oldmember.getMemberId(), oldmember.getMemberName());
         }
+
         Optional<St8Member> optMember = new St8DbFacade().selectMember(1);
         if (optMember.isPresent()) {
             St8Member member = optMember.get();
@@ -202,6 +205,8 @@ public class Step08Java8FunctionTest extends PlainTestCase {
         // だが、上記の例では、上と同じく1を渡しているため、T get()で受け取るインスタンスは同じであり、したがってLog出力される内容も一緒である。
         //
         // 答え：正解でした。
+        
+        // [1on1でのふぉろー] Optionalの根本メリット、それを流行らせる追加要素
     }
 
     /**
@@ -304,6 +309,7 @@ public class Step08Java8FunctionTest extends PlainTestCase {
         // 答え：正解でした。
     }
 
+    // TODO jflute 次回1on1このへんから (2025/01/29)
     /**
      * What string is sea variables at the method end? <br>
      * (メソッド終了時の変数 sea の中身は？)

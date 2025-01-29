@@ -15,9 +15,11 @@
  */
 package org.docksidestage.javatry.basic.st6.os;
 
-// TODO done shiny せっかくなので自分の名前を追加で by jflute (2025/01/15)
+// done shiny せっかくなので自分の名前を追加で by jflute (2025/01/15)
 
 import static java.rmi.server.LogStream.log;
+
+// TODO shiny unused import: java.rmi.server by jflute (2025/01/29)
 
 /**
  * @author jflute
@@ -28,7 +30,7 @@ public abstract class St6OperationSystem {
     // ===================================================================================
     //                                                                          Definition
     //                                                                          ==========
-    // TODO done shiny もうunusedなので削除しちゃって大丈夫です by jflute (2025/01/15)
+    // done shiny もうunusedなので削除しちゃって大丈夫です by jflute (2025/01/15)
 
     // ===================================================================================
     //                                                                           Attribute

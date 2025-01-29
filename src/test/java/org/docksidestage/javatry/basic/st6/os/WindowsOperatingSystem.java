@@ -15,6 +15,9 @@ public class WindowsOperatingSystem extends St6OperationSystem {
     // ===================================================================================
     //                                                                      User Directory
     //                                                                      ==============
+    // [1on1でのふぉろー] 思考エクササイズ2: WindowsとOldWindowsで値(ロジック)が同じだけど再利用する？
+    // 新と旧で概念を分けて考えることもできるかも by shiny
+    // 概念としては同じと捉えることができても、実務的な面で再利用するかどうかはまだ判断がある by jflute
     @Override
     protected String getFileSeparator() {
         return "\\";

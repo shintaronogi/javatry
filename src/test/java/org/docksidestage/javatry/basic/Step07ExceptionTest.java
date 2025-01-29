@@ -350,7 +350,7 @@ public class Step07ExceptionTest extends PlainTestCase {
         }
     }
 
-    // TODO jflute 次回1on1ここから (2025/01/22)
+    // done jflute 次回1on1ここから (2025/01/22)
     // ===================================================================================
     //                                                                           Challenge
     //                                                                           =========

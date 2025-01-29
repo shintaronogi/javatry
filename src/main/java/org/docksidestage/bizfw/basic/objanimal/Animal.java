@@ -21,6 +21,8 @@ import org.docksidestage.bizfw.basic.objanimal.loud.Loudable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+// TODO shiny unusedのimport (Logger) by jflute (2025/01/29)
+
 /**
  * The object for animal(動物).
  * @author jflute
@@ -30,7 +32,7 @@ public abstract class Animal implements Loudable {
     // ===================================================================================
     //                                                                          Definition
     //                                                                          ==========
-    // TODO done shiny unused by jflute (2025/01/15)
+    // done shiny unused by jflute (2025/01/15)
     // → 上のコメント自体も消しちゃってもですが、フォローコメントなど入ってるので残す。
     // [1on1でのフォロー] IntelliJ の idea ディレクトリについて。
     // https://dbflute.seasar.org/ja/manual/topic/friends/intellij/index.html

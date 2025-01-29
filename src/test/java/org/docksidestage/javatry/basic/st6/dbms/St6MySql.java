@@ -21,7 +21,7 @@ package org.docksidestage.javatry.basic.st6.dbms;
  */
 public class St6MySql extends St6Rdbms {
 
-    // TODO done shiny 流れも再利用したい (calcして文字列作って、の順番の2step) by jflute (2025/01/15)
+    // done shiny 流れも再利用したい (calcして文字列作って、の順番の2step) by jflute (2025/01/15)
     // (calcと文字列生成の間に、別の処理が追加されるってなったとき、1箇所直せば済むようにしたい)
     @Override
     protected String getPagingQueryPrefix(int pageSize, int offset) {

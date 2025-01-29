@@ -495,7 +495,7 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
      */
     public void test_objectOriented_writing_specialization_extractToConcrete() {
         // your confirmation code here
-        // TODO done shiny Windows のロジックが消え去ってしまっています by jflute (2025/01/15)
+        // done shiny Windows のロジックが消え去ってしまっています by jflute (2025/01/15)
         St6OperationSystem os = new MacOperatingSystem("shiny");
         log(os.buildUserResourcePath("sea")); // should be /Users/shiny/sea
 
@@ -504,6 +504,8 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
 
         St6OperationSystem os3 = new OldWindowsOperatingSystem("shiny");
         log(os3.buildUserResourcePath("sea")); // should be \Documents and Settings\shiny\sea
+        
+        // TODO jflute 後で思考エクササイズ (2025/01/29)
     }
 
     // ===================================================================================

@@ -1,6 +1,6 @@
 package org.docksidestage.javatry.basic.st6.dbms;
 
-// TODO done shiny MySQLとPostgreSQLはSQLなのか？(is-aの関係) by jflute (2025/01/15)
+// done shiny MySQLとPostgreSQLはSQLなのか？(is-aの関係) by jflute (2025/01/15)
 // 抽象クラスの概念を導き出すときのセオリーの一つとして、必要としてない具象クラスも想像してみる。
 /**
  * @author shiny

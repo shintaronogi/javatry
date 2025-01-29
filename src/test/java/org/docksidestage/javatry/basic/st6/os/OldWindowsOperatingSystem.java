@@ -22,7 +22,8 @@ public class OldWindowsOperatingSystem extends St6OperationSystem {
 
     @Override
     protected String getUserDirectory() {
-        // TODO JavaTryの方でTypoになってますかね？
+        // done JavaTryの方でTypoになってますかね？
+        // 本家直しましたーありがとうございます by jflute
         return "/Documents and Settings/" + getLoginId();
     }
 }
