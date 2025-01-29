@@ -15,19 +15,20 @@
  */
 package org.docksidestage.javatry.basic.st6.os;
 
-// TODO shiny せっかくなので自分の名前を追加で by jflute (2025/01/15)
+// TODO done shiny せっかくなので自分の名前を追加で by jflute (2025/01/15)
+
+import static java.rmi.server.LogStream.log;
+
 /**
  * @author jflute
+ * @author shiny
  */
 public abstract class St6OperationSystem {
 
     // ===================================================================================
     //                                                                          Definition
     //                                                                          ==========
-    // TODO shiny もうunusedなので削除しちゃって大丈夫です by jflute (2025/01/15)
-    private static final String OS_TYPE_MAC = "Mac";
-    private static final String OS_TYPE_WINDOWS = "Windows";
-    private static final String OS_TYPE_OLD_WINDOWS = "OldWindows";
+    // TODO done shiny もうunusedなので削除しちゃって大丈夫です by jflute (2025/01/15)
 
     // ===================================================================================
     //                                                                           Attribute

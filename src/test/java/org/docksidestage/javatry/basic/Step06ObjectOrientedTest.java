@@ -30,9 +30,11 @@ import org.docksidestage.bizfw.basic.objanimal.loud.Loudable;
 import org.docksidestage.bizfw.basic.objanimal.runner.FastRunner;
 import org.docksidestage.javatry.basic.st6.dbms.St6MySql;
 import org.docksidestage.javatry.basic.st6.dbms.St6PostgreSql;
-import org.docksidestage.javatry.basic.st6.dbms.St6Sql;
+import org.docksidestage.javatry.basic.st6.dbms.St6Rdbms;
 import org.docksidestage.javatry.basic.st6.os.MacOperatingSystem;
+import org.docksidestage.javatry.basic.st6.os.OldWindowsOperatingSystem;
 import org.docksidestage.javatry.basic.st6.os.St6OperationSystem;
+import org.docksidestage.javatry.basic.st6.os.WindowsOperatingSystem;
 import org.docksidestage.unit.PlainTestCase;
 
 /**
@@ -481,9 +483,9 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
      */
     public void test_objectOriented_writing_generalization_extractToAbstract() {
         // your confirmation code here
-        St6Sql mySql = new St6MySql();
+        St6Rdbms mySql = new St6MySql();
         log(mySql.buildPagingQuery(10, 1)); // should be limit 0, 10
-        St6Sql postgreSql = new St6PostgreSql();
+        St6Rdbms postgreSql = new St6PostgreSql();
         log(postgreSql.buildPagingQuery(10, 1)); // offset 0 limit 10
     }
 
@@ -493,9 +495,15 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
      */
     public void test_objectOriented_writing_specialization_extractToConcrete() {
         // your confirmation code here
-        // TODO shiny Windows のロジックが消え去ってしまっています by jflute (2025/01/15)
+        // TODO done shiny Windows のロジックが消え去ってしまっています by jflute (2025/01/15)
         St6OperationSystem os = new MacOperatingSystem("shiny");
         log(os.buildUserResourcePath("sea")); // should be /Users/shiny/sea
+
+        St6OperationSystem os2 = new WindowsOperatingSystem("shiny");
+        log(os2.buildUserResourcePath("sea")); // should be \Users\shiny\sea
+
+        St6OperationSystem os3 = new OldWindowsOperatingSystem("shiny");
+        log(os3.buildUserResourcePath("sea")); // should be \Documents and Settings\shiny\sea
     }
 
     // ===================================================================================

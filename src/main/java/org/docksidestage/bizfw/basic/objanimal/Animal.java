@@ -30,10 +30,10 @@ public abstract class Animal implements Loudable {
     // ===================================================================================
     //                                                                          Definition
     //                                                                          ==========
-    // TODO shiny unused by jflute (2025/01/15)
+    // TODO done shiny unused by jflute (2025/01/15)
+    // → 上のコメント自体も消しちゃってもですが、フォローコメントなど入ってるので残す。
     // [1on1でのフォロー] IntelliJ の idea ディレクトリについて。
     // https://dbflute.seasar.org/ja/manual/topic/friends/intellij/index.html
-    private static final Logger logger = LoggerFactory.getLogger(Animal.class);
 
     // ===================================================================================
     //                                                                           Attribute
