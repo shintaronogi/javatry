@@ -505,7 +505,7 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
         St6OperationSystem os3 = new OldWindowsOperatingSystem("shiny");
         log(os3.buildUserResourcePath("sea")); // should be \Documents and Settings\shiny\sea
         
-        // TODO jflute 後で思考エクササイズ (2025/01/29)
+        // done jflute 後で思考エクササイズ (2025/01/29)
     }
 
     // ===================================================================================

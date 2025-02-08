@@ -19,7 +19,7 @@ package org.docksidestage.javatry.basic.st6.os;
 
 import static java.rmi.server.LogStream.log;
 
-// TODO done shiny unused import: java.rmi.server by jflute (2025/01/29)
+// TODO (復活) shiny unused import: java.rmi.server by jflute (2025/01/29)
 
 /**
  * @author jflute

@@ -19,7 +19,7 @@ import org.docksidestage.bizfw.basic.objanimal.barking.BarkedSound;
 import org.docksidestage.bizfw.basic.objanimal.barking.BarkingProcess;
 import org.docksidestage.bizfw.basic.objanimal.loud.Loudable;
 
-// TODO done shiny unusedのimport (Logger) by jflute (2025/01/29)
+// done shiny unusedのimport (Logger) by jflute (2025/01/29)
 
 /**
  * The object for animal(動物).

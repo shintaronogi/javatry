@@ -309,7 +309,10 @@ public class Step08Java8FunctionTest extends PlainTestCase {
         // 答え：正解でした。
     }
 
-    // TODO jflute 次回1on1このへんから (2025/01/29)
+    // done jflute 次回1on1このへんから (2025/01/29)
+    // [1on1でのふぉろー] Optionalの問答無用get()の教科書的な話
+    // そして、現実論でみんなちゃんとしたorElseThrow()ができるだろうか？問題
+    // そして、DBFluteのOptionalの考え方の紹介
     /**
      * What string is sea variables at the method end? <br>
      * (メソッド終了時の変数 sea の中身は？)
@@ -335,6 +338,7 @@ public class Step08Java8FunctionTest extends PlainTestCase {
         // それがキャッチされ、getMessage()でwaveがseaにAssignされるため、seaはwaveになる。
     }
 
+    // TODO jflute Stream API, 1on1でふぉろー予定 (2025/02/05)
     // ===================================================================================
     //                                                                          Stream API
     //                                                                          ==========
