@@ -15,13 +15,13 @@
  */
 package org.docksidestage.javatry.colorbox;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.StringJoiner;
+import java.util.*;
 
 import org.docksidestage.bizfw.colorbox.ColorBox;
 import org.docksidestage.bizfw.colorbox.color.BoxColor;
+import org.docksidestage.bizfw.colorbox.impl.CompactColorBox;
+import org.docksidestage.bizfw.colorbox.impl.StandardColorBox;
+import org.docksidestage.bizfw.colorbox.parser.ColorBoxParser;
 import org.docksidestage.bizfw.colorbox.space.BoxSpace;
 import org.docksidestage.bizfw.colorbox.yours.YourPrivateRoom;
 import org.docksidestage.unit.PlainTestCase;
@@ -429,7 +429,7 @@ public class Step11ClassicStringTest extends PlainTestCase {
                     continue;
                 }
 
-                StringJoiner stringJoiner = new StringJoiner("; ", "map: { ", " }");
+                StringJoiner stringJoiner = new StringJoiner("; ", "map:{ ", " }");
                 for (Map.Entry<?, ?> entry : ((Map<?, ?>) content).entrySet()) {
                     stringJoiner.add(entry.getKey() + " = " + entry.getValue());
                 }
@@ -475,7 +475,7 @@ public class Step11ClassicStringTest extends PlainTestCase {
     }
 
     private String formatMap(Map<?, ?> map) {
-        StringJoiner stringJoiner = new StringJoiner("; ", "map: { ", " }");
+        StringJoiner stringJoiner = new StringJoiner(" ; ", "map:{ ", " }");
         for (Map.Entry<?, ?> entry : map.entrySet()) {
             if (entry.getValue() instanceof Map) {
                 stringJoiner.add(entry.getKey() + " = " + formatMap((Map<?, ?>) entry.getValue()));
@@ -495,6 +495,113 @@ public class Step11ClassicStringTest extends PlainTestCase {
      * (whiteのカラーボックスのupperスペースに入っているSecretBoxクラスのtextをMapに変換してtoString()すると？)
      */
     public void test_parseMap_flat() {
+        // 【シャイニーのつぶやき】
+        // うーんなるほど、ちょっと難しそう。
+        // でも最近業務でめちゃめんどくさいSerializer・Deserializerを独自実装結構やったのでこのまま解きたい！
+        // とりあえずwhiteのColorboxのupperスペース入っているTextを取得してくる所までのコードを書く。
+        List<ColorBox> colorBoxList = new YourPrivateRoom().getColorBoxList();
+
+        if (colorBoxList.isEmpty()) {
+            log("ColorBox is empty. Therefore no content.");
+            return;
+        }
+
+        // 【シャイニーのつぶやき】
+        // まず問題文から流れをどうしようか考えてみる...（色んなやり方はあるけど）
+        // 1. ColorboxがWhiteかそれ以外の場合があるので、その判別を一つのポイントとしたい
+        // 2. 次にColorboxのUpperスペースをとってくるもの
+        // 3. その次にそのBoxSpaceからSecretText（content）をとってくるもの
+        // UpperSpaceというのはAbstractColorBoxを継承しているCompactColorBoxとStandardColorBoxがもってる独自メソッドで、
+        // SpaceListからindex = 0のものをとってくる。SpaceList[]はNotEmptyである為取れないことはないと仮定（まーリストである以上保証はできないのでExceptionどこかでなげてもよかったかも）
+        // 複数のSpaceがあるので、SpaceからSecretTextを取り出すものは別関数に切り出しておくと、再利用できる。
+        // とりあえず、その二つのクラスどちらかのインスタンスである場合はCastしてメソッドを呼び出し、そうでない場合はOptional.empty()を返すのがextractUpperSpace()メソッドとしては責務にあってると思う
+        // そこから、getContent()を呼び出す（nullの可能性はあり）、nullでない場合はcontentがSecretBox型なのを確認してからキャストして返す
+        // 4. SecretBox(というかcontent : nullable)がEmptyでないことを確認してから、TextをGetする（ここはSecretBoxのコンストラクタないでnullでないことが保証されている）
+        // という流れが良さそうなので一旦ここまで実装してみる
+        for (ColorBox colorBox : colorBoxList) {
+            if (!isWhiteColorBox(colorBox)) {
+                continue;
+            }
+
+            Optional<BoxSpace> optionalBoxSpace = extractUpperSpace(colorBox);
+            if (!optionalBoxSpace.isPresent()) {
+                continue;
+            }
+
+            Optional<YourPrivateRoom.SecretBox> optionalSecretBox = extractSecretBoxFromBoxSpace(optionalBoxSpace.get());
+            if (!optionalSecretBox.isPresent()) {
+                continue;
+            }
+
+            String secretText = optionalSecretBox.get().getText(); // textがNullでないことはConstructorで保証されている
+            // 【シャイニーのつぶやき】
+            // よさそう！とりあえずSecretBoxからTextは取れた。
+             log(secretText);
+
+            // よーしここから本番なんですが...
+            // まず一旦シンプルに考えてみよう （一次元のフラットなMapの文字列の場合）
+            //
+            // Mapかどうかを判断するにはmap: {...}ってなってればいい
+            // Mapであることが判断できれば...
+            // その中身を取り出すには、最初のmap: {をReplace（String.replaceFirst()とかで）して、
+            // 最後の1文字}をSubstringで削るのはありかな。
+            // Mapの中身は ; で区切られているので、" ; "でSplitすればそれぞれのKeyValuePairが取れる
+            // KeyValueのペアは = で区切られているので、" = "でSplitすればKeyとValueの値の配列が取れる
+            // それをMapにAddだっけPutだっけ（Javaでは）すればMap自体は得られそうである。
+            // ...一旦脳みそでシュミレーション...
+            // FlatなMapだったらそれでも行けそうだけど、Nestしてたら無理だな
+            // ; でSplitしてる時点でさらにネストされたMapがあれば、その中身も区切られちゃうから中途半端な区切り方になってダメ
+            //
+            // ちゃんとパースしていくしかなさそう、うん。
+            // まあ、一つ問題としてどこまで厳密にパースするかっていう話は大前提ある。
+            // map: {..って形ではなくて、{だけだったら？とか
+            // 要素と要素の間のスペースが空文字二つとかないとかだったら？パースエラーにするの？とか
+            // 型情報はどうする？IntegerとかBoolだったらとか
+            // 理論上キーがMapなこともあるけど（なんでとはなるが）
+            // 前提WhiteのColorboxに入れてる文字列をみると、そこまで厳密にパースエラーにする必要はなさそうなのでできるだけシンプルに実装しようと判断。
+            // 全てのMapはKey: String, Value: Object (Map or String)と仮定して進めよう。
+            // ステップを考えていく...
+            // 1. Mapかどうかの判断軸は"{"と"}"この二つの文字である。
+            // つまり、文字列をまずパースしていって、{がくるまで続ける（まあなければMapではないね）
+            // {と一致してるものが見つかれば、その中身はKeyValuePairの集合ってことになる
+            // 2. Keyをパースする
+            // Keyはこの場合、= がでてくるまでの文字列（trimはする）それをMapのKeyに詰めれる。
+            // 3. Valueをパースする
+            // パースしていって{が見つかればステップを戻る（再帰的に呼び出す）
+            // じゃなければ文字列としてパースしてReturn
+            // 4. ;がきたら２からパースを続け、}がきたら終わる
+            // ちょっと想像を雑にかいてみたけど、こんな感じで進められそうなので一旦ざっと書いて、そこから関数に分けていく!
+            //
+            // 経過1. JavaにはClosureないよねえ...
+            // 経過2. クラスに切り出さないのはやっぱきついかな...パースしていく中でいまどこにいるかのIndexをどうしても保持したくなる？ （意識的に副作用起こしたい...空文字のスキップとか）
+            // 一旦クラスに切り出してみる
+            // 経過3. Utils的な使い方がしたいので、newするのは使う側的にはだるい...Parser.toMap()てきによばるのがベストそう
+            // 経過4.　うーん別にIndexを保持しなくても、関数の間で残りのParseするべき文字列を渡し会えばいけそう（関数的な考え方）
+            // 経過5. とりあえず書けた！
+
+            Map<String, Object> result = ColorBoxParser.toMap(secretText);
+            log(result);
+        }
+    }
+
+    private boolean isWhiteColorBox(ColorBox colorBox) {
+        return colorBox.getColor().getColorName().equals("white");
+    }
+
+    private Optional<YourPrivateRoom.SecretBox> extractSecretBoxFromBoxSpace(BoxSpace boxSpace) {
+        return Optional.of(boxSpace.getContent())
+                .filter(content -> content instanceof YourPrivateRoom.SecretBox)
+                .map(secretBox -> (YourPrivateRoom.SecretBox) secretBox);
+    }
+
+    private Optional<BoxSpace> extractUpperSpace(ColorBox colorBox) {
+        if (colorBox instanceof StandardColorBox) {
+            return Optional.of(((StandardColorBox) colorBox).getUpperSpace());
+        } else if (colorBox instanceof CompactColorBox) {
+            return Optional.of(((CompactColorBox) colorBox).getUpperSpace());
+        } else {
+            return Optional.empty();
+        }
     }
 
     /**
@@ -502,5 +609,65 @@ public class Step11ClassicStringTest extends PlainTestCase {
      * (whiteのカラーボックスのmiddleおよびlowerスペースに入っているSecretBoxクラスのtextをMapに変換してtoString()すると？)
      */
     public void test_parseMap_nested() {
+        List<ColorBox> colorBoxList = new YourPrivateRoom().getColorBoxList();
+
+        if (colorBoxList.isEmpty()) {
+            log("ColorBox is empty. Therefore no content.");
+            return;
+        }
+
+        for (ColorBox colorBox : colorBoxList) {
+            if (!isWhiteColorBox(colorBox)) {
+                continue;
+            }
+
+            // Lower Spaceの処理
+            Optional<BoxSpace> optionalLowerSpace = extractLowerSpace(colorBox);
+            if (!optionalLowerSpace.isPresent()) {
+                continue;
+            }
+
+            Optional<YourPrivateRoom.SecretBox> optionalSecretBoxLowerSpace = extractSecretBoxFromBoxSpace(optionalLowerSpace.get());
+            if (!optionalSecretBoxLowerSpace.isPresent()) {
+                continue;
+            }
+
+            String secretTextLowerSpace = optionalSecretBoxLowerSpace.get().getText();
+            log(secretTextLowerSpace);
+            log(ColorBoxParser.toMap(secretTextLowerSpace));
+
+            // Middle Space の処理
+            Optional<BoxSpace> optionalMiddleSpace = extractMiddleSpace(colorBox);
+            if (!optionalMiddleSpace.isPresent()) {
+                continue;
+            }
+
+            Optional<YourPrivateRoom.SecretBox> optionalSecretBoxMiddleSpace = extractSecretBoxFromBoxSpace(optionalMiddleSpace.get());
+            if (!optionalSecretBoxMiddleSpace.isPresent()) {
+                continue;
+            }
+
+            String secretTextMiddleSpace = optionalSecretBoxMiddleSpace.get().getText();
+            log(secretTextMiddleSpace);
+            log(ColorBoxParser.toMap(secretTextMiddleSpace));
+        }
+    }
+
+    private Optional<BoxSpace> extractMiddleSpace(ColorBox colorBox) {
+        if (colorBox instanceof StandardColorBox) {
+            return Optional.of(((StandardColorBox) colorBox).getMiddleSpace());
+        } else {
+            return Optional.empty();
+        }
+    }
+
+    private Optional<BoxSpace> extractLowerSpace(ColorBox colorBox) {
+        if (colorBox instanceof StandardColorBox) {
+            return Optional.of(((StandardColorBox) colorBox).getLowerSpace());
+        } else if (colorBox instanceof CompactColorBox) {
+            return Optional.of(((CompactColorBox) colorBox).getLowerSpace());
+        } else {
+            return Optional.empty();
+        }
     }
 }
