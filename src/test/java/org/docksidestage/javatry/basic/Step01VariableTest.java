@@ -26,7 +26,7 @@ import org.docksidestage.unit.PlainTestCase;
 // done shiny [読み物課題] レビューしやすいコード (Reviewable Code) by jflute (2024/10/02)
 // https://jflute.hatenadiary.jp/entry/20160912/reviewable
 
-// TODO jflute 1on1にて、背景コメントの補足をちょこっとずつやっていく (2024/10/02)
+// done jflute 1on1にて、背景コメントの補足をちょこっとずつやっていく (2024/10/02)
 // http://dbflute.seasar.org/ja/tutorial/handson/review/codingpolicy.html#backgroundcomment
 // [1on1にてふぉろー] (2024/12/11)
 // // オートマティックおうむ返しコメントより背景や理由を
@@ -50,6 +50,12 @@ import org.docksidestage.unit.PlainTestCase;
 //
 // 「フレームワークとかライブラリとか、中身の挙動をわかってこそ、ちゃんと使いこなせる」 by shiny
 //
+
+// [1on1でのふぉろー] メソッド名や変数名もコメント
+// なんとかフラグというboolean変数名 | jfluteの日記
+// https://jflute.hatenadiary.jp/entry/20181013/flgornuance
+// SQLのエリアス名、頭文字省略は...うーん
+// https://jflute.hatenadiary.jp/entry/20140908/sqlalias
 
 // done shiny クラスのJavaDocのauthorの修正をお願いします by jflute (2024/10/09)
 // // 3. 最低限のクラスJavaDoc | ハンズオンのコーディングポリシー

@@ -338,7 +338,9 @@ public class Step08Java8FunctionTest extends PlainTestCase {
         // それがキャッチされ、getMessage()でwaveがseaにAssignされるため、seaはwaveになる。
     }
 
-    // TODO jflute Stream API, 1on1でふぉろー予定 (2025/02/05)
+    // done jflute Stream API, 1on1でふぉろー予定 (2025/02/05)
+    // 抽象度をひとつ上げている。メニュー表から選べばやってくれる。
+    // 一方で、言語によってはStreamみたいなのをサポートしない言語もあって、現実論との兼ね合いもある
     // ===================================================================================
     //                                                                          Stream API
     //                                                                          ==========
@@ -349,6 +351,7 @@ public class Step08Java8FunctionTest extends PlainTestCase {
     public void test_java8_stream_concept() {
         List<St8Member> memberList = new St8DbFacade().selectMemberListAll();
         List<String> oldfilteredNameList = new ArrayList<>();
+        
         for (St8Member member : memberList) {
             if (member.getWithdrawal().isPresent()) {
                 oldfilteredNameList.add(member.getMemberName());
