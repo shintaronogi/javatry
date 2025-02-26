@@ -15,9 +15,13 @@
  */
 package org.docksidestage.javatry.colorbox;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 import org.docksidestage.bizfw.colorbox.ColorBox;
+import org.docksidestage.bizfw.colorbox.space.BoxSpace;
 import org.docksidestage.bizfw.colorbox.yours.YourPrivateRoom;
 import org.docksidestage.unit.PlainTestCase;
 
@@ -30,7 +34,7 @@ import org.docksidestage.unit.PlainTestCase;
  * o don't fix the YourPrivateRoom class and color-box classes
  * </pre>
  * @author jflute
- * @author your_name_here
+ * @author shiny
  */
 public class Step12StreamStringTest extends PlainTestCase {
 
@@ -56,6 +60,12 @@ public class Step12StreamStringTest extends PlainTestCase {
      * (カラーボックスの中で、色の名前が一番長いものは？)
      */
     public void test_length_findMax_colorSize() {
+         List<ColorBox> colorBoxList = new YourPrivateRoom().getColorBoxList();
+         String answer = colorBoxList.stream()
+                 .map(colorBox -> colorBox.getColor().getColorName())
+                 .max(Comparator.comparingInt(String::length))
+                 .orElse("*not found");
+         log(answer);
     }
 
     /**
@@ -63,6 +73,15 @@ public class Step12StreamStringTest extends PlainTestCase {
      * (カラーボックスに入ってる文字列の中で、一番長い文字列は？)
      */
     public void test_length_findMax_stringContent() {
+        List<ColorBox> colorBoxList = new YourPrivateRoom().getColorBoxList();
+        String answer = colorBoxList.stream()
+                .flatMap(colorBox -> colorBox.getSpaceList().stream())
+                .map(BoxSpace::getContent)
+                .filter(content -> content instanceof String)
+                .map(content -> (String) content)
+                .max(Comparator.comparingInt(String::length))
+                .orElse("*not found");
+        log(answer);
     }
 
     /**
@@ -70,6 +89,17 @@ public class Step12StreamStringTest extends PlainTestCase {
      * (カラーボックスに入ってる値 (文字列以外はtoString()) の中で、二番目に長い文字列は？ (同じ長さのものがあれば後の方を))
      */
     public void test_length_findSecondMax_contentToString() {
+        List<ColorBox> colorBoxList = new YourPrivateRoom().getColorBoxList();
+        String answer = colorBoxList.stream()
+                .flatMap(colorBox -> colorBox.getSpaceList().stream())
+                .map(BoxSpace::getContent)
+                .filter(Objects::nonNull)
+                .map(Object::toString)
+                .sorted(Comparator.comparingInt(String::length).reversed().thenComparing(Comparator.naturalOrder()))
+                .skip(1)
+                .findFirst()
+                .orElse("*not found");
+        log(answer);
     }
 
     /**
@@ -77,6 +107,14 @@ public class Step12StreamStringTest extends PlainTestCase {
      * (カラーボックスに入ってる文字列の長さの合計は？)
      */
     public void test_length_calculateLengthSum() {
+        List<ColorBox> colorBoxList = new YourPrivateRoom().getColorBoxList();
+        int answer = colorBoxList.stream()
+                .flatMap(colorBox -> colorBox.getSpaceList().stream())
+                .map(BoxSpace::getContent)
+                .filter(content -> content instanceof String)
+                .mapToInt(content -> ((String) content).length())
+                .sum();
+        log(answer);
     }
 
     // ===================================================================================
@@ -87,6 +125,23 @@ public class Step12StreamStringTest extends PlainTestCase {
      * ("Water" で始まる文字列をしまっているカラーボックスの色は？)
      */
     public void test_startsWith_findFirstWord() {
+        List<ColorBox> colorBoxList = new YourPrivateRoom().getColorBoxList();
+        String answer = colorBoxList.stream()
+                .flatMap(colorBox -> colorBox.getSpaceList().stream())
+                .map(BoxSpace::getContent)
+                .filter(content -> content instanceof String)
+                .filter(content -> ((String) content).startsWith("Water"))
+                .findFirst()
+                .map(contentWithWater -> colorBoxList.stream()
+                        .filter(colorBox -> colorBox.getSpaceList().stream()
+                                .map(BoxSpace::getContent)
+                                .filter(Objects::nonNull)
+                                .anyMatch(content -> content.equals(contentWithWater)))
+                        .map(colorBox -> colorBox.getColor().getColorName())
+                        .findFirst()
+                        .orElse("*not found")
+                ).orElse("*not found");
+        log(answer);
     }
 
     /**
