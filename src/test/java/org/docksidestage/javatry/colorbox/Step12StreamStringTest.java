@@ -18,7 +18,10 @@ package org.docksidestage.javatry.colorbox;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.function.ToIntFunction;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.docksidestage.bizfw.colorbox.ColorBox;
 import org.docksidestage.bizfw.colorbox.space.BoxSpace;
@@ -60,12 +63,25 @@ public class Step12StreamStringTest extends PlainTestCase {
      * (カラーボックスの中で、色の名前が一番長いものは？)
      */
     public void test_length_findMax_colorSize() {
+        // [1on1でのふぉろー] max()のところの文法的な解釈を細かく見てみた。
+        // 途中で、型が変わっているところもポイント、読むときに一個前の戻り値を意識しないと。
          List<ColorBox> colorBoxList = new YourPrivateRoom().getColorBoxList();
+
          String answer = colorBoxList.stream()
                  .map(colorBox -> colorBox.getColor().getColorName())
                  .max(Comparator.comparingInt(String::length))
                  .orElse("*not found");
          log(answer);
+
+        // 一方で、ここはデザインが発生するところで... by jflute
+        // こういうふうに分離するデザインもあるかも (選択肢ある)
+        // Optional<String> optMax = colorBoxList.stream()
+        //         .map(colorBox -> colorBox.getColor().getColorName())
+        //         .max(Comparator.comparingInt(String::length));
+        // log(optMax.orElse("*not found"));
+         
+         // stream()というおまじないに関する質問から派生してEclipse Collectionsの紹介
+         // 逆に Eclipse Collections を知ることで、stream() のおまじないの特徴がわかった。
     }
 
     /**
