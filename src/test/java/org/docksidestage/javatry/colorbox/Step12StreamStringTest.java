@@ -15,9 +15,7 @@
  */
 package org.docksidestage.javatry.colorbox;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import org.docksidestage.bizfw.colorbox.ColorBox;
@@ -149,6 +147,20 @@ public class Step12StreamStringTest extends PlainTestCase {
      * (カラーボックスに入ってる「ど」を二つ以上含む文字列で、最後の「ど」は何文字目から始まる？ (e.g. "どんどん" => 3))
      */
     public void test_lastIndexOf_findIndex() {
+        List<ColorBox> colorBoxList = new YourPrivateRoom().getColorBoxList();
+        int answer = colorBoxList.stream()
+                .flatMap(colorBox -> colorBox.getSpaceList().stream())
+                .map(BoxSpace::getContent)
+                .filter(content -> content instanceof String)
+                .filter(content -> ((String) content).chars().filter(chr -> chr == 'ど').count() >= 2)
+                .mapToInt(str -> ((String) str).lastIndexOf('ど') + 1)
+                .findFirst()
+                .orElse(-1);
+        if (answer > 0) {
+            log(answer);
+        } else {
+            log("*not found");
+        }
     }
 
     // ===================================================================================
@@ -159,6 +171,26 @@ public class Step12StreamStringTest extends PlainTestCase {
      * (カラーボックスの中に入っているGuardianBoxクラスのtextの長さの合計は？)
      */
     public void test_welcomeToGuardian() {
+        List<ColorBox> colorBoxList = new YourPrivateRoom().getColorBoxList();
+        int answer = colorBoxList.stream()
+                .flatMap(colorBox -> colorBox.getSpaceList().stream())
+                .map(BoxSpace::getContent)
+                .filter(content -> content instanceof YourPrivateRoom.GuardianBox)
+                .map(content -> (YourPrivateRoom.GuardianBox) content)
+                .peek(guardianBox -> {
+                    guardianBox.wakeUp();
+                    guardianBox.allowMe();
+                    guardianBox.open();
+                })
+                .mapToInt(guardianBox -> {
+                    try {
+                        return guardianBox.getText().length();
+                    } catch (YourPrivateRoom.GuardianBoxTextNotFoundException ignored) {
+                        return 0;
+                    }
+                })
+                .sum();
+        log(answer);
     }
 
     // ===================================================================================
@@ -169,6 +201,25 @@ public class Step12StreamStringTest extends PlainTestCase {
      * (カラーボックスの中に入っている java.util.Map を "map:{ key = value ; key = value ; ... }" という形式で表示すると？)
      */
     public void test_showMap_flat() {
+        List<ColorBox> colorBoxList = new YourPrivateRoom().getColorBoxList();
+        List<String> answers = colorBoxList.stream()
+                .flatMap(colorBox -> colorBox.getSpaceList().stream())
+                .map(BoxSpace::getContent)
+                .filter(content -> content instanceof Map)
+                .map(content -> ((Map<?, ?>) content).entrySet().stream()
+                        .map(entry -> entry.getKey() + " = " + entry.getValue())
+                        .collect(Collectors.joining(" ; ", "map:{ ", "}"))
+                )
+                .collect(Collectors.toList());
+
+        if (answers.isEmpty()) {
+            log("*not found");
+            return;
+        }
+
+        for (String answer : answers) {
+            log(answer);
+        }
     }
 
     /**
@@ -176,6 +227,28 @@ public class Step12StreamStringTest extends PlainTestCase {
      * (カラーボックスの中に入っている java.util.Map を "map:{ key = value ; key = map:{ key = value ; ... } ; ... }" という形式で表示すると？)
      */
     public void test_showMap_nested() {
+        List<ColorBox> colorBoxList = new YourPrivateRoom().getColorBoxList();
+        List<String> answers = colorBoxList.stream()
+                .flatMap(colorBox -> colorBox.getSpaceList().stream())
+                .map(BoxSpace::getContent)
+                .filter(content -> content instanceof Map)
+                .map(content -> (Map<?, ?>) content)
+                .map(this::formatMap)
+                .collect(Collectors.toList());
+        if (answers.isEmpty()) {
+            log("*not found");
+            return;
+        }
+
+        for (String answer : answers) {
+            log(answer);
+        }
+    }
+
+    private String formatMap(Map<?, ?> map) {
+        return map.entrySet().stream()
+                .map(entry -> entry.getKey() + " = " + ((entry.getValue() instanceof Map) ? formatMap((Map<?, ?>) entry.getValue()) : entry.getValue()))
+                .collect(Collectors.joining(" ; ", "map:{ ", "}"));
     }
 
     // ===================================================================================
