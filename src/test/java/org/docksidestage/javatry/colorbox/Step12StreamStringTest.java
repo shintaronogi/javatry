@@ -58,12 +58,24 @@ public class Step12StreamStringTest extends PlainTestCase {
      * (カラーボックスの中で、色の名前が一番長いものは？)
      */
     public void test_length_findMax_colorSize() {
+        // [1on1でのふぉろー] max()のところの文法的な解釈を細かく見てみた。
+        // 途中で、型が変わっているところもポイント、読むときに一個前の戻り値を意識しないと。
          List<ColorBox> colorBoxList = new YourPrivateRoom().getColorBoxList();
          String answer = colorBoxList.stream()
                  .map(colorBox -> colorBox.getColor().getColorName())
                  .max(Comparator.comparingInt(String::length))
                  .orElse("*not found");
          log(answer);
+
+         // 一方で、ここはデザインが発生するところで... by jflute
+         // こういうふうに分離するデザインもあるかも (選択肢ある)
+         // Optional<String> optMax = colorBoxList.stream()
+         //         .map(colorBox -> colorBox.getColor().getColorName())
+         //         .max(Comparator.comparingInt(String::length));
+         // log(optMax.orElse("*not found"));
+          
+          // stream()というおまじないに関する質問から派生してEclipse Collectionsの紹介
+          // 逆に Eclipse Collections を知ることで、stream() のおまじないの特徴がわかった。
     }
 
     /**
@@ -88,6 +100,7 @@ public class Step12StreamStringTest extends PlainTestCase {
      */
     public void test_length_findSecondMax_contentToString() {
         List<ColorBox> colorBoxList = new YourPrivateRoom().getColorBoxList();
+        // TODO shiny reversed()後のnaturalOrderは無くても結果は変わらないっぽい？ by jflute (2025/03/12)
         String answer = colorBoxList.stream()
                 .flatMap(colorBox -> colorBox.getSpaceList().stream())
                 .map(BoxSpace::getContent)
@@ -129,17 +142,29 @@ public class Step12StreamStringTest extends PlainTestCase {
                 .map(BoxSpace::getContent)
                 .filter(content -> content instanceof String)
                 .filter(content -> ((String) content).startsWith("Water"))
-                .findFirst()
+                .findFirst() // 最初のやつに割りキリ
                 .map(contentWithWater -> colorBoxList.stream()
                         .filter(colorBox -> colorBox.getSpaceList().stream()
                                 .map(BoxSpace::getContent)
                                 .filter(Objects::nonNull)
                                 .anyMatch(content -> content.equals(contentWithWater)))
                         .map(colorBox -> colorBox.getColor().getColorName())
-                        .findFirst()
-                        .orElse("*not found")
-                ).orElse("*not found");
+                        .findFirst() // 論理的には必ず存在する (Waterは見つかってるわけだから)
+                        .orElse("*not found") // なのでここは万が一処理 (実際に実行されない)
+                ).orElse("*not found"); // そもそもWaterが無かった場合など
         log(answer);
+
+        // [1on1でのふぉろー] こうも書ける？ by jflute (2025/03/12)
+        //String jfluteAns = colorBoxList.stream()
+        //      .filter(colorBox -> colorBox.getSpaceList().stream()
+        //              .map(BoxSpace::getContent)
+        //              .filter(content -> content instanceof String)
+        //              .map(content -> (String) content)
+        //              .anyMatch(content -> content.startsWith("Water"))) // ここ！
+        //      .findFirst() // 最初のやつに割りキリ
+        //      .map(colobBox -> colobBox.getColor().getColorName())
+        //      .orElse("*not found");
+        //log(jfluteAns);
     }
 
     /**
