@@ -131,7 +131,7 @@ public class Step11ClassicStringTest extends PlainTestCase {
             // ダブルループだけど、Stringを一個確保するだけなら空間消費はO(1)。
             // Setにしても結局比較するのは文字列の長さだから基本的に変わらないか
             // もっと良い方法があるのかもしれないけど、思いつかないのでこのままダブルループを採用する！(もっと良い方法があればごめん、未来の僕)
-            // TODO done shiny [ふぉろー] 自分も思いつかないですね(^^ by jflute (2025/02/13)
+            // done shiny [ふぉろー] 自分も思いつかないですね(^^ by jflute (2025/02/13)
             // これが何度も繰り返されるのであれば、構造化したオブジェクトに保持しておいて最短で探すってできますが、
             // 一発ものを想定したら、nested loop するしかないかなと。
             for (BoxSpace boxSpace : boxSpaceList) {
@@ -155,12 +155,12 @@ public class Step11ClassicStringTest extends PlainTestCase {
     public void test_length_findSecondMax_contentToString() {
         // 【シャイニーのつぶやき】
         // 文字列以外はtoString()って問題文に書いてあるので、さっきの問題でBoxSpaceの文字列だけをみていたのはあってるっぽいぞ。
-        // TODO done shiny [ふぉろー] yes by jflute (2025/02/13)
+        // done shiny [ふぉろー] yes by jflute (2025/02/13)
 
         String maxContentToString = "";
         // 【シャイニーのつぶやき】
         // "second max"とは...?ってなるけど、意味はわかるので一旦スルー。
-        // TODO done shiny [ふぉろー] たしかに！ by jflute (2025/02/13)
+        // done shiny [ふぉろー] たしかに！ by jflute (2025/02/13)
         String secondMaxContentToString = "";
 
         List<ColorBox> colorBoxList = new YourPrivateRoom().getColorBoxList();
@@ -193,7 +193,7 @@ public class Step11ClassicStringTest extends PlainTestCase {
                 // contentの長さが現在二番目のやつより短い場合（それ以外）：
                 // なにもしない
                 // これで大丈夫なはず！
-                // TODO done shiny [ふぉろー] 大丈夫だと思います！ by jflute (2025/02/13)
+                // done shiny [ふぉろー] 大丈夫だと思います！ by jflute (2025/02/13)
                 if (contentToString.length() >= maxContentToString.length()) {
                     secondMaxContentToString = maxContentToString;
                     maxContentToString = contentToString;
@@ -314,7 +314,7 @@ public class Step11ClassicStringTest extends PlainTestCase {
                 int currentIndex = 0; //  ↑で述べた通り、文字列を区切って調べていくので現在のIndexを保持
                 int lastIndex = 0; // 答えとなる最後のIndex　
 
-                // TODO done shiny [ふぉろー] おお、自力 lastIndexOf() だ、すごい。 by jflute (2025/02/13)
+                // done shiny [ふぉろー] おお、自力 lastIndexOf() だ、すごい。 by jflute (2025/02/13)
                 // これはこれでトレーニングになるので良いです。一応、lastIndexOf() があるのでそれで代用できます。
                 // へんしん：お、さすがにありましたか...笑 よく考えてみればめっちゃありそうなメソッドではありました。
                 while ((currentIndex = ((String) content).indexOf(findWord, currentIndex)) != -1) {
@@ -382,7 +382,7 @@ public class Step11ClassicStringTest extends PlainTestCase {
                     continue;
                 }
 
-                // TODO done shiny 細かいですが、ここまで何度も使っていれば変数抽出お願いしたいところですね by jflute (2025/02/13)
+                // done shiny 細かいですが、ここまで何度も使っていれば変数抽出お願いしたいところですね by jflute (2025/02/13)
                 // (IntelliJの機能で一発でできると思うので)
                 YourPrivateRoom.GuardianBox guardianBox = (YourPrivateRoom.GuardianBox) content;
                 guardianBox.wakeUp();
@@ -394,7 +394,7 @@ public class Step11ClassicStringTest extends PlainTestCase {
                     textLengthSum += text.length();
                 } catch (YourPrivateRoom.GuardianBoxTextNotFoundException ignored) {
                     // Catch and Ignore Exception since textLength is 0 in this case
-                    // TODO done shiny [いいね] ignored という変数名もとても良いし、コメントも良い by jflute (2025/02/13)
+                    // done shiny [いいね] ignored という変数名もとても良いし、コメントも良い by jflute (2025/02/13)
                 }
             }
         }
@@ -424,7 +424,7 @@ public class Step11ClassicStringTest extends PlainTestCase {
         // リストにまとめてJoinするか...?
         // ちょっと調べた：JavaにはStringJoinerっていうものがあるらしい! StringBuilderと基本似たような挙動だけど、separator, prefix, suffixを指定できる。
         // ということで、Mapの中身はPrefix, Suffix含めてこれで対応できそうなので、書いてみる
-        // TODO done shiny [いいね] すんごい綺麗にできてる！ by jflute (2025/02/13)
+        // done shiny [いいね] すんごい綺麗にできてる！ by jflute (2025/02/13)
 
         List<ColorBox> colorBoxList = new YourPrivateRoom().getColorBoxList();
 
@@ -443,7 +443,7 @@ public class Step11ClassicStringTest extends PlainTestCase {
                     continue;
                 }
 
-                // TODO done shiny [いいね] StringJoiner でだいぶ簡単にできちゃうんだね笑 by jflute (2025/02/13)
+                // done shiny [いいね] StringJoiner でだいぶ簡単にできちゃうんだね笑 by jflute (2025/02/13)
                 StringJoiner stringJoiner = new StringJoiner("; ", "map:{ ", " }");
                 for (Map.Entry<?, ?> entry : ((Map<?, ?>) content).entrySet()) {
                     stringJoiner.add(entry.getKey() + " = " + entry.getValue());
@@ -466,7 +466,7 @@ public class Step11ClassicStringTest extends PlainTestCase {
         // いや、待てよ。問題文的には二重のMapの表現だけになってるけど、これがもし３重、４重となる場合も含んでるとしたら？
         // 単純なForループだけでは解決できないので再起的によばないといけなくなる
         // つまり、絶対にきりださないと無理かな
-        // TODO done shiny [いいね] これまたすんごい良くできてる！ by jflute (2025/02/13)
+        // done shiny [いいね] これまたすんごい良くできてる！ by jflute (2025/02/13)
 
         List<ColorBox> colorBoxList = new YourPrivateRoom().getColorBoxList();
 
@@ -494,7 +494,11 @@ public class Step11ClassicStringTest extends PlainTestCase {
         StringJoiner stringJoiner = new StringJoiner(" ; ", "map:{ ", " }");
         for (Map.Entry<?, ?> entry : map.entrySet()) {
             if (entry.getValue() instanceof Map) {
-                // TODO done shiny [いいね] 再帰Good by jflute (2025/02/13)
+                // done shiny [いいね] 再帰Good by jflute (2025/02/13)
+                // [1on1でのふぉろー] 厳密には、+せずにadd()で分けた方がパフォーマンスは良い。
+                // (mapStringの中間成果物失敗よもやま話もした)
+                // (DBFluteのAbstractSqlClauseのインスタンス生成の気遣いの話もした)
+                // (ArrayListやStringBuilderの気遣いの話もした)
                 stringJoiner.add(entry.getKey() + " = " + formatMap((Map<?, ?>) entry.getValue()));
             } else {
                 stringJoiner.add(entry.getKey() + " = " + entry.getValue());
@@ -503,7 +507,7 @@ public class Step11ClassicStringTest extends PlainTestCase {
         return stringJoiner.toString();
     }
 
-    // TODO jflute ここから先は後でレビュー (2025/02/13)
+    // done jflute ここから先は後でレビュー (2025/02/13)
     // ===================================================================================
     //                                                                           Good Luck
     //                                                                           =========
